@@ -9,12 +9,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8384080a-3d94-45e7-8725-e6c7fccf5758" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Android/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Android/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Android/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Android/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Android/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Android/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/Android/app/build.gradle" afterDir="false" />
-    </list>
+    <list default="true" id="8384080a-3d94-45e7-8725-e6c7fccf5758" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
