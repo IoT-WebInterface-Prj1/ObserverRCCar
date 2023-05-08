@@ -11,11 +11,11 @@
         android:padding="16dp">
 
         <Button
-            android:id="@+id/button_forward"
+            android:id="@+id/button_Left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Forward"
+            android:text="Left"
             android:background="#80000000"/>
 
         <LinearLayout
@@ -24,34 +24,34 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/button_left"
+                android:id="@+id/button_forword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Left"
+                android:text=""
                 android:background="#80000000"/>
 
             <Button
-                android:id="@+id/button_right"
+                android:id="@+id/button_backword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Right"
+                android:text=""
                 android:background="#80000000"/>
 
         </LinearLayout>
 
         <Button
-            android:id="@+id/button_backward"
+            android:id="@+id/button_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Backward"
+            android:text="Right"
             android:background="#80000000"/>
 
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
+            android:layout_gravity="bottom|left"
             ></Button>
 
     </LinearLayout>
