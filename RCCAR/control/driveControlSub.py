@@ -1,11 +1,9 @@
 import paho.mqtt.client as mqtt
-# from .models import
-# from django.utls import timezone
 from .driveFunc import drive
 from .driveControlPub import resultPub
 import threading
 
-topic = ""
+topic = "response"
 isBoot = 0
 lock = threading.Lock()
 
@@ -17,9 +15,12 @@ def on_connect(client, userdata, flags, rc):
     else: print("연결 실패 : ", rc)
     
 def on_message(client, userdata, msg):
+    global isBoot
+    
     value = str(msg.payload.decode())
     _, _, router = msg.topic.split("/")
     
+    print(router, value, isBoot)
     if router == "boot": # 시동 관련
         bootTopic = topic + "/boot"
         try:
@@ -33,19 +34,20 @@ def on_message(client, userdata, msg):
                 isBoot = 0
                 lock.release()
                 
-            # resultpub(bootTopic, client, 1)
+            resultPub(bootTopic, client, 1)
         except Exception as err:
             #pub Err
-            # resultpub(bootTopic, client)
+            resultPub(bootTopic, client)
             pass
     else:
         directTopic = topic + "/direct"
-        pass
+        
         if isBoot == 0: pass #Pub Err
-        #    result =  drive(direct)
-        # if result:
-        #     resultpub(directTopic, client, 1)
-        # else: resultpub(directTopic, client)
+        else:
+        # ======= is Boot =========
+            result =  drive(value)
+            if result: resultPub(directTopic, client, 1)
+            else: resultPub(directTopic, client)
 
 client = mqtt.Client()
 client.on_connect = on_connect
