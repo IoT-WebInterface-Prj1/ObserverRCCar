@@ -6,27 +6,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+<!--    <![CDATA[-->
 
-    <Button>
-        android:id="@+id/boot"
+<!--    android:id="@+id/boot"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="168dp"-->
+<!--        android:layout_marginTop="345dp"-->
+<!--        android:layout_marginEnd="152dp"-->
+<!--        android:layout_marginBottom="338dp"-->
+<!--        android:text="Boot"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    -->
+
+<!--    ]]>-->
+
+    <Button
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="168dp"
-        android:layout_marginTop="345dp"
-        android:layout_marginEnd="152dp"
-        android:layout_marginBottom="338dp"
-        android:text="Boot"
+        android:layout_marginStart="146dp"
+        android:layout_marginTop="318dp"
+        android:layout_marginEnd="265dp"
+        android:layout_marginBottom="365dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <Button>
-        android:id="@+id/controlpage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="160dp"
-        tools:layout_editor_absoluteY="552dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+<!--    android:id="@+id/controlpage"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Button"-->
+<!--        tools:ignore="MissingConstraints"-->
+<!--        tools:layout_editor_absoluteX="160dp"-->
+<!--        tools:layout_editor_absoluteY="552dp" -->
+<!--    />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

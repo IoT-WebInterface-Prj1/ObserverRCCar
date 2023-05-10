@@ -21,7 +21,7 @@ class boot : AppCompatActivity() {
         mqttClient = MqttClient(brokerUrl, clientId, MemoryPersistence())
         mqttClient.connect()
 
-        val startButton = findViewById<Button>(R.id.boot)
+        val startButton = findViewById<Button>(R.id.Boot)
         startButton.setOnClickListener {
             val topic = "start"
             val message = "boot"
