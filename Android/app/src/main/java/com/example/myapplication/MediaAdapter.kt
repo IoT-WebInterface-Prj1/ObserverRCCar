@@ -7,7 +7,6 @@ import android.app.DownloadManager
 import android.content.Context
 import android.media.ThumbnailUtils
 import android.net.Uri
-
 import android.os.Environment
 import android.provider.MediaStore
 import android.view.LayoutInflater
@@ -18,16 +17,13 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
-
 import java.io.File
-
-
 
 
 data class Media(val title: String, val url: String, val upload_date: String)
 
-class media_adapter(private val mediaList: List<Media>)
-    : RecyclerView.Adapter<media_adapter.ViewHolder>(){
+class MediaAdapter(private val mediaList: List<Media>)
+    : RecyclerView.Adapter<MediaAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder{
         val view = LayoutInflater.from(parent.context).inflate(R.layout.media_list, parent, false)
@@ -92,7 +88,6 @@ class media_adapter(private val mediaList: List<Media>)
                     }
                     DownloadManager.STATUS_FAILED ->{
                         downloading = false
-                        // 에러처리를 수행하세요
                         val errorReason = getDownloadErrorReason(reason)
                         Log.e("Download Error", "Download failed: $errorReason")
                     }

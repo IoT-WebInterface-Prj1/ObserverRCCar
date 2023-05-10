@@ -1,8 +1,10 @@
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.Media
+import com.example.myapplication.MediaAdapter
 import com.example.myapplication.R
-import com.example.myapplication.media_adapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Retrofit
@@ -28,21 +30,30 @@ class upload_media: AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.media_list)
 
+        val recyclerView = findViewById<RecyclerView>(R.id.RecyclerView)
+
         val call = apiService.getVideoList()
         call.enqueue(object : Callback<List<Media>> {
             override fun onResponse(call: Call<List<Media>>, response: Response<List<Media>>){
                 if (response.isSuccessful){
                     val mediaList = response.body()
-                    val adapter = media_adapter(mediaList)
-                    recyclerView.adapter = adapter
-                    else{
-
+                    if(mediaList != null) {
+                        recyclerView.adapter = MediaAdapter(mediaList)
+                    }else{
+                        showToast("Empty media list")
                     }
-                }
-                override fun onFailure(call: Call<List<Media>>, t: Throwable) {
-                    TODO("Not yet implemented")
+                }else{
+                    showToast("Error: ${response.code()}")
                 }
             }
+
+            override fun onFailure(call: Call<List<Media>>, t: Throwable) {
+                showToast("Network requset failed")
+            }
         })
+    }
+
+    private fun showToast(message: String){
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
