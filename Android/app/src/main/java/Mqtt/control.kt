@@ -1,41 +1,20 @@
-package Mqtt
+import org.eclipse.paho.client.mqttv3.MqttClient
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions
+import org.eclipse.paho.client.mqttv3.MqttException
+import org.eclipse.paho.client.mqttv3.MqttMessage
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 
-import android.content.Context
-import android.util.Log
-import org.eclipse.paho.android.service.MqttAndroidClient
-import org.eclipse.paho.client.mqttv3.*
+class MQTTClient(private val brokerUrl: String, private val clientId: String) {
 
-class MqttHelper private constructor(context: Context) {
-    private val TAG = MqttHelper::class.simpleName
-    private val BROKER_URL = "tcp://localhost:1883"
-    private val mqttAndroidClient: MqttAndroidClient = MqttAndroidClient(context, BROKER_URL, MqttClient.generateClientId())
-
-    companion object {
-        private var instance: MqttHelper? = null
-        private val TOPIC = "car-control"
-
-
-        @Synchronized
-        fun getInstance(context: Context): MqttHelper {
-            if (instance == null) {
-                instance = MqttHelper(context)
-            }
-            return instance!!
-        }
-    }
+    private lateinit var mqttClient: MqttClient
 
     fun connect() {
+        val persistence = MemoryPersistence()
         try {
-            val token = mqttAndroidClient.connect()
-            token.actionCallback = object : IMqttActionListener {
-                override fun onSuccess(asyncActionToken: IMqttToken) {
-                    Log.d(TAG, "onSuccess")
-                }
-
-                override fun onFailure(asyncActionToken: IMqttToken, exception: Throwable) {
-                    Log.d(TAG, "onFailure")
-                }
-            }
+            mqttClient = MqttClient(brokerUrl, clientId, persistence)
+            val options = MqttConnectOptions()
+            options.isCleanSession = true
+            mqttClient.connect(options)
         } catch (e: MqttException) {
             e.printStackTrace()
         }
@@ -43,58 +22,34 @@ class MqttHelper private constructor(context: Context) {
 
     fun disconnect() {
         try {
-            mqttAndroidClient.disconnect()
+            mqttClient.disconnect()
         } catch (e: MqttException) {
             e.printStackTrace()
         }
     }
 
-    fun publish(payload: String) {
+    fun publish(topic: String, message: String) {
         try {
-            val message = MqttMessage(payload.toByteArray())
-            mqttAndroidClient.publish(TOPIC, message)
+            val mqttMessage = MqttMessage(message.toByteArray())
+            mqttClient.publish(topic, mqttMessage)
         } catch (e: MqttException) {
             e.printStackTrace()
         }
     }
 
-    fun subscribe(topic: String) {
+    fun subscribe(topic: String, messageHandler: (String) -> Unit) {
         try {
-            mqttAndroidClient.subscribe(topic, 0, object : IMqttMessageListener {
+            mqttClient.setCallback(object : org.eclipse.paho.client.mqttv3.MqttCallback {
+                override fun connectionLost(cause: Throwable?) {}
                 override fun messageArrived(topic: String?, message: MqttMessage?) {
-                    val payload = String(message!!.payload)
-                    Log.d(TAG, "messageArrived: $topic : $payload")
-
-                    when (topic) {
-                        "right" -> doRightTurn()
-                        "left" -> doLeftTurn()
-                        "forward" -> doForward()
-                        "backward" -> doBackward()
-                    }
+                    message?.let { messageHandler(String(it.payload)) }
                 }
+                override fun deliveryComplete(token: org.eclipse.paho.client.mqttv3.IMqttDeliveryToken?) {}
             })
+            mqttClient.subscribe(topic)
         } catch (e: MqttException) {
             e.printStackTrace()
         }
     }
 
-    fun doRightTurn() {
-        // 우회전
-        Log.d(TAG, "doRightTurn")
-    }
-
-    fun doLeftTurn() {
-        // 좌회전
-        Log.d(TAG, "doLeftTurn")
-    }
-
-    fun doForward() {
-        // 전진
-        Log.d(TAG, "doForward")
-    }
-
-    fun doBackward() {
-        // 후진
-        Log.d(TAG, "doBackward")
-    }
 }
