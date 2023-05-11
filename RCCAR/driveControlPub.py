@@ -11,6 +11,6 @@ def resultPub(_topic, client, res = 0, msg = ""):
     
 def ultrasonicPub(dist, client):
     topic = "reponse/detect"
-    msg = f"Object Detect!! //Distance : {dist * 100}(cm)"
+    n
     
     client.publish(topic, msg)

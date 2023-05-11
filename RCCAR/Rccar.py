@@ -11,14 +11,14 @@ import time
 import threading
 
 class Rccar:
-    def __init__(self, left, right):
+    def __init__(self, left, right, echo, trigger):
         # Sensors ==============
         # Motor
         self.motorDrive = Drive(left, right)
         # Ultrasonic
-        self.ultrasonic = DistanceSensor(16, 12)
-        self.ultrasonic.threshold_distance = 0.5
-        self.ultrasonic.when_in_range = self.detect
+        self.ultrasonic = None
+        self.echo = echo
+        self.trig = trigger
         # =====================
         
         # MQTT --------------
@@ -45,7 +45,7 @@ class Rccar:
     def on_connect(self, client, userdata, flags, rc):
         print("Connected with result code " + str(rc))
         if rc == 0:
-            print("MQTT 연결 성공, drive/control 구독 신청 . . @. @. . ")
+            print("MQTT 연결 성공, rccar/drive/# 구독 신청 . . @. @. . ")
             client.subscribe("rccar/drive/#")
         else: print("연결 실패 : ", rc)
         
@@ -70,24 +70,39 @@ class Rccar:
     def setBoot(self, result):
         self.isBoot = result
         
-        # Boot OFF -> Drive Stop
+        # Boot OFF -> Drive Stop, Sensor OFF
         if (result == 0):
             self.motorDrive.stop()
+            self.ultrasonic = None
+        # Boot ON -> Sensor ON
+        else:    
+            self.ultrasonic = DistanceSensor(self.echo, self.trig) #Echo : 9, Trigger : 10
         
     def getBoot(self):
         return self.isBoot
     
-    def detect(self):
-        dist = self.ultrasonic.distance 
-        detectTopic = self.topic + "/detect"
+    def getSensor(self, sensor):
+        if (sensor == "distance"): return self.ultrasonic
+    
+    def detect(self, dist):
+        detectTopic = "rccar/response/detect"
         detectMsg = f"Object Detect!! //Distance : {dist * 100}(cm)"
         
         resultPub(detectTopic, self.client, 1, detectMsg)
-        if (dist < 0.3): self.stop()            
+        if (dist < 0.3): self.motorDrive.stop()            
     
-if __name__ == "__main__":
-    car = Rccar((5, 6, 26), (23, 24, 25))
+if __name__ == "__main__":    
+    car = Rccar((5, 6, 26), (23, 24, 25), 9, 10)
     
     # --- mqtt 실행 ---
     client = car.getClient()
-    client.loop_forever()
+    client.loop_start()
+    
+    while True:
+        # --- distance sensor ---
+        distance = car.getSensor("distance")
+        if distance == None: continue
+    
+        if (distance.distance < 0.5):
+            car.detect(distance.distance)
+        time.sleep(0.01) # sleep 을 주지 않으면 동작 안함 ! 
