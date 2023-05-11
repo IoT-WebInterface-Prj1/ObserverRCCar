@@ -8,6 +8,7 @@ from Drive import Drive
 from LEDS import LEDS
 from gpiozero import  DistanceSensor
 from gpiozero import LED
+from gpiozero import Buzzer
 
 import time
 import threading
@@ -127,6 +128,9 @@ class Rccar:
         resultPub(detectTopic, self.client, 1, detectMsg)
         if (dist < 0.3): self.motorDrive.stop()            
         
+        # Buzzer Control
+        self.buzzerControl(dist)
+        
     def ledControl(self):
         now = self.getState()
         
@@ -134,6 +138,9 @@ class Rccar:
         elif (now == 3): self.stop_led.firstOn() # left
         elif (now == 4): self.stop_led.secondOn()
         else: self.stop_led.off() # forward or ect... led off
+        
+    def buzzerControl(self, dist):
+            pass
             
 if __name__ == "__main__":    
     car = Rccar((5, 6, 26), (23, 24, 25), 9, 10, (20, 21))
