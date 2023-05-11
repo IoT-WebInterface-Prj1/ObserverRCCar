@@ -31,17 +31,19 @@ def driveControl(isBoot, client, value, Motors):
     
     if isBoot == 0: 
         errMsg = "ERR : Boot is //OFF//"
-        resultPub(driveTopic, client, 1, errMsg)
+        resultPub(driveTopic, client, 0, errMsg)
     else:
     # ======= is Boot =========
         try:
+            print(f"Drive Val [[{value}]]")
             if value == "forward": Motors.forward()
             elif value == "backward": Motors.backward()
             elif value == "right": Motors.right()
             elif value == "left": Motors.left()
             elif value == "stop": Motors.stop()
             else: raise FaultOperError 
-            resultPub(driveTopic, client, 1)
+            
+            resultPub(driveTopic, client, 1, f"{value} success")
         except Exception as err:
-            resultPub(driveTopic, client, 0, err)
+            resultPub(driveTopic, client, 0, f"{value} fail")
             print(err)

@@ -15,7 +15,7 @@ class Rccar:
         # Sensors ==============
         # Motor
         self.motorDrive = Drive(left, right)
-        #Ultrasonic
+        # Ultrasonic
         self.ultrasonic = DistanceSensor(16, 12)
         self.ultrasonic.threshold_distance = 0.5
         self.ultrasonic.when_in_range = self.detect
@@ -29,15 +29,18 @@ class Rccar:
         self.isBoot = 0
         self.lock = threading.Lock()
         # -------------------
-        
-        self.strat()
+        self.start()
         
     def start(self):
         try:
+            self.client.on_connect = self.on_connect
+            self.client.on_message = self.on_message
             self.client.connect('localhost')
-            self.client.loop_start()
         except Exception as err:
             print(f"ERR ! /{err}/")
+            
+    def getClient(self):
+        return self.client
         
     def on_connect(self, client, userdata, flags, rc):
         print("Connected with result code " + str(rc))
@@ -52,15 +55,24 @@ class Rccar:
         
         if router == "boot": # 시동 관련
             result = bootControl(self.client, value)
+            
+            # Boot Lock -------------
             self.lock.acquire()
             self.setBoot(result)
             self.lock.release()
+            # ----------------------
+            
+            print(f"Boot State -> [[{self.getBoot()}]]")
         else:
             bootState = self.getBoot()
             driveControl(bootState, client, value, self.motorDrive)
     
     def setBoot(self, result):
         self.isBoot = result
+        
+        # Boot OFF -> Drive Stop
+        if (result == 0):
+            self.motorDrive.stop()
         
     def getBoot(self):
         return self.isBoot
@@ -75,3 +87,7 @@ class Rccar:
     
 if __name__ == "__main__":
     car = Rccar((5, 6, 26), (23, 24, 25))
+    
+    # --- mqtt 실행 ---
+    client = car.getClient()
+    client.loop_forever()

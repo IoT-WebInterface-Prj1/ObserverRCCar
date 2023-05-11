@@ -2,8 +2,8 @@ from Motor import Motor
 
 class Drive:
     def __init__(self, left, right):
-        self.leftMotor = Motor(left)
-        self.rightMotor = Motor(right)
+        self.motorLeft = Motor(left)
+        self.motorRight = Motor(right)
     
     def forward(self):
         self.motorLeft.forward()        
