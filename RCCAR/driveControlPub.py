@@ -8,9 +8,3 @@ def resultPub(_topic, client, res = 0, msg = ""):
     else: message = msg
     
     client.publish(topic, message)
-    
-def ultrasonicPub(dist, client):
-    topic = "reponse/detect"
-    n
-    
-    client.publish(topic, msg)

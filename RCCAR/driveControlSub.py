@@ -44,6 +44,8 @@ def driveControl(isBoot, client, value, Motors):
             else: raise FaultOperError 
             
             resultPub(driveTopic, client, 1, f"{value} success")
+            
+            return value
         except Exception as err:
             resultPub(driveTopic, client, 0, f"{value} fail")
             print(err)
