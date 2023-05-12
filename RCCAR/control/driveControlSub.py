@@ -24,15 +24,20 @@ def on_message(client, userdata, msg):
     if router == "boot": # 시동 관련
         bootTopic = topic + "/boot"
         try:
-            if value == "on": 
-                lock.acquire()
-                isBoot = 1
-                lock.release()
-                # LED Func
-            elif value == "off":
-                lock.acquire()
-                isBoot = 0
-                lock.release()
+            # if value == "on": 
+            #     lock.acquire()
+            #     isBoot = 1
+            #     lock.release()
+            #     # LED Func
+            # elif value == "off":
+            #     lock.acquire()
+            #     isBoot = 0
+            #     lock.release()
+            value = "on"
+            # lock.acquire()
+            isBoot = 1
+            # lock.release()
+            
                 
             resultPub(bootTopic, client, 1)
         except Exception as err:
@@ -54,7 +59,9 @@ client.on_connect = on_connect
 client.on_message = on_message
 
 try:
-    client.connect('localhost')
+    broker = "172.30.1.18"
+    port = 1883
+    client.connect("broker, port", 60)
     client.loop_start()
 except Exception as err:
     print(f"ERR ! /{err}/")
