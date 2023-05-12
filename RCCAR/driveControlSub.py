@@ -18,8 +18,7 @@ def bootControl(client, value):
             isBoot = 1
             # LED Func
         elif value == "off": isBoot = 0
-            
-        resultPub(bootTopic, client, 1)
+        
         return isBoot
     except Exception as err:
         #pub Err
