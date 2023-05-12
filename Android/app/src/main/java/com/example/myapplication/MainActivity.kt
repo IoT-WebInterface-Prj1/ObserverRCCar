@@ -16,14 +16,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val brokerUrl = "tcp://localhost:1883"
-        val clientId = "android"
+        val brokerUrl = "tcp://192.168.56.1:1883"
+        val clientId = "myapplication"
         mqttClient = MqttClient(brokerUrl, clientId, MemoryPersistence())
         mqttClient.connect()
 
         val startButton = findViewById<Button>(R.id.boot)
+        startButton.text = getString(R.string.boot_button_text)
         startButton.setOnClickListener {
-            val topic = "start"
+            val topic = "rccar/drive/start"
             val message = "boot"
             val mqttMessage = MqttMessage(message.toByteArray())
             mqttClient.publish(topic, mqttMessage)
@@ -31,9 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         mqttClient.setCallback(object : MqttCallback {
             override fun connectionLost(throwable: Throwable?) {
-                if (throwable != null){
-                    throwable.printStackTrace()
-                }
+                throwable?.printStackTrace()
                 try {
                     mqttClient.reconnect()
                 } catch(ex: MqttException){
