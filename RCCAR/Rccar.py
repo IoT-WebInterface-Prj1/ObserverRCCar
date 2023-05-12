@@ -178,10 +178,14 @@ class Rccar:
             pass
         
     def buzzerControl(self, op, dist = 0):
+        # op : {'on' : ultrasonic Detect, 'off' : ultrasonic Not Detect, 'crash' : tilt Detect }
         if (op == "on"): 
             self.setBuzzerOn(1)
             self.buzzer.beep(on_time =  0.4* dist, off_time = 0.1 * dist)
-        else: self.setBuzzerOn(0)
+        elif (op == "off"): self.setBuzzerOn(0)
+        elif (op == 'crash') : 
+            self.setBuzzerOn(1)
+            self.buzzer.beep(on_time =  0.1, off_time = 0.1, n = 2)
         
     def tiltControl(self):
         tiltTopic = self.topic + "/tilt"
@@ -190,6 +194,7 @@ class Rccar:
         try :
             if (self.tilt.getTilt()): 
                 self.warnningControl("r")
+                self.buzzerControl("crash")
                 # resultPub(tiltTopic, self.client, 1, tiltMsg)
         except FaultOperError as err:
             # resultPub(tiltTopic, self, client, 0, "잘못된 접근 - ERR_TILT")
