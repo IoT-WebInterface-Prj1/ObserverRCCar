@@ -1,51 +1,47 @@
-package com.example.myapplication;
+package com.example.myapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.content.Intent
 import org.eclipse.paho.client.mqttv3.*
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mqttClient: MqttClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.control)
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
 
-        val brokerUrl = "tcp://localhost:1883"
-        val clientId = "android"
-        mqttClient = MqttClient(brokerUrl, clientId, MemoryPersistence())
-        mqttClient.connect()
+//          172.30.1.57
 
-        val rightButton = findViewById<Button>(R.id.right_button)
-        rightButton.setOnClickListener {
-            publish("right")
+            val brokerUrl = "tcp://172.30.1.18:1883" // 같은 와이파이 ip주소를 할당받아야
+            val clientId = "android"
+            try{
+                mqttClient = MqttClient(brokerUrl, clientId, MemoryPersistence())
+                val options = MqttConnectOptions()
+                options.connectionTimeout = 5
+                mqttClient.connect(options)
+            }catch(ex: MqttException){
+                ex.printStackTrace()
+            }
+
+            val startButton = findViewById<Button>(R.id.boot)
+            startButton.text = getString(R.string.boot_button_text)
+            startButton.setOnClickListener {
+                val topic = "rccar/drive/boot"
+                val message = "on"
+                val mqttMessage = MqttMessage(message.toByteArray())
+            mqttClient.publish(topic, mqttMessage)
         }
-
-        val leftButton = findViewById<Button>(R.id.left_button)
-        leftButton.setOnClickListener {
-            publish("left")
-        }
-
-        val forwardButton = findViewById<Button>(R.id.forward_button)
-        forwardButton.setOnClickListener {
-            publish("forward")
-        }
-
-        val backwardButton = findViewById<Button>(R.id.backward_button)
-        backwardButton.setOnClickListener {
-            publish("backward")
-        }
-
-        mqttClient.subscribe("control")
 
         mqttClient.setCallback(object : MqttCallback {
             override fun connectionLost(throwable: Throwable?) {
-                if (throwable != null){
-                    throwable.printStackTrace()
-                }
+                throwable?.printStackTrace()
                 try {
                     mqttClient.reconnect()
                 } catch(ex: MqttException){
@@ -54,9 +50,19 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun messageArrived(topic: String?, mqttMessage: MqttMessage?) {
-                if (topic == "control") {
-                    val message = mqttMessage?.toString()
+                if (topic != null && mqttMessage != null && topic == "rccar/response/boot") {
+                    // 시동을 걸고, 성공 여부를 발행
+                    val success = startEngine(mqttMessage)
+                    val resultTopic = "rccar/response/boot"
+                    val resultMessage = if (success) "on" else "off"
+                    val resultMqttMessage = MqttMessage(resultMessage.toByteArray())
+                    mqttClient.publish(resultTopic, resultMqttMessage)
 
+                    runOnUiThread {
+                        val intent = Intent(this@MainActivity, Control::class.java)
+                        intent.putExtra("success", success)
+                        startActivity(intent)
+                    }
                 }
             }
 
@@ -64,10 +70,16 @@ class MainActivity : AppCompatActivity() {
                 println("Message delivered")
             }
         })
+
+        mqttClient.subscribe("rccar/response/boot")
     }
 
-    private fun publish(message: String) {
-        mqttClient.publish("control", MqttMessage(message.toByteArray()))
+    private fun startEngine(success: MqttMessage?) : Boolean {
+        if(success != null && success.toString() == "success"){
+            return true
+        }else{
+            return false
+        }
+
     }
 }
-
