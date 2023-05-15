@@ -7,16 +7,13 @@
 </head>
 <body>
     <div>
-        <a href="?mode=snapshot">스냅샷 보기</a> |
         <a href="?mode=stream">스트림 보기</a>
     </div>
     <br>
     {% if mode == "#" %}
-        <img id="image"/>
-    {% elif mode == "snapshot" %}
-        <img id="image" src="{% url 'snapshot' %}"/>
+        <img id="image" />
     {% elif mode == "stream" %}
-        <img id="image" src="{% url 'stream' %}"/>
+        <img id="image" src="{% url 'stream'%}"/>
     {% endif %}
 </body>
 </html>
