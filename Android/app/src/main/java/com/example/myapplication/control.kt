@@ -39,6 +39,11 @@ class control : AppCompatActivity() {
             publish("backward")
         }
 
+        val recordButton = findViewById<Button>(R.id.record_button)
+        recordButton.setOnClickListener {
+
+        }
+
         mqttClient.subscribe("control")
 
         mqttClient.setCallback(object : MqttCallback {
@@ -69,5 +74,6 @@ class control : AppCompatActivity() {
     private fun publish(message: String) {
         mqttClient.publish("control", MqttMessage(message.toByteArray()))
     }
+
 }
 
