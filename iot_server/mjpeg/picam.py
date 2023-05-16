@@ -35,7 +35,7 @@ class MJpegStreamCam:
 
     def __iter__(self):
         encode_param=[int(cv2.IMWRITE_JPEG_QUALITY), 80]
-        face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_fullbody.xml')
+        face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
         with picamera.array.PiRGBArray(self.camera, size=self.size) as stream:
             while True:

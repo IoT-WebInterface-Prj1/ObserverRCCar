@@ -3,7 +3,7 @@
 <ul>
     {% for sec_file in sec_files %}
     <li>
-        <a href="{% url 'iot:detail' sec_file.id %}">{{ sec_file.file_name }}</a>
+        <a href="{% url 'mjpeg:detail' sec_file.id %}">{{ sec_file.file_name }}</a>
     </li>
     {% endfor %}
 </ul>

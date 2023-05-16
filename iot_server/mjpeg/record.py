@@ -41,7 +41,7 @@ def start_recording():
 
 def upload_file(filepath):
     # 파일을 업로드할 url
-    url = "http://127.0.0.1:8000/upload"
+    url = "http://127.0.0.1:8000/mjpeg/upload/"
     
     with open(filepath, 'rb') as f:
         files = {"file": f}
