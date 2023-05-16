@@ -10,16 +10,21 @@ from Tilt import Tilt
 from gpiozero import  DistanceSensor
 from gpiozero import LED
 from gpiozero import Buzzer
+from gpiozero import RGBLED
+from colorzero import Color
 
 import time
 import threading
+
+host_id = '172.30.1.120'
+port = 1883
 
 class FaultOperError(Exception):    # Exception을 상속받아서 새로운 예외를 만듦
     def __init__(self):
         super().__init__('잘못된 접근 발생')    
 
 class Rccar:
-    def __init__(self, left, right, echo, trigger, stop, buzzer, tilt):
+    def __init__(self, left, right, echo, trigger, stop, buzzer, tilt, rgbled):
         self.topic = "rccar/response"
         # Sensors ==============
         # Motor --
@@ -30,7 +35,7 @@ class Rccar:
         self.trig = trigger
         # LEDS --
         self.stop_led = LEDS(stop)
-        # self.state = LED(state)
+        self.rgb_led = RGBLED(rgbled[0], rgbled[1], rgbled[2])
         # Buzzer --
         self.buzzer = Buzzer(buzzer)
         # Tilt --
@@ -63,7 +68,7 @@ class Rccar:
         try:
             self.client.on_connect = self.on_connect
             self.client.on_message = self.on_message
-            self.client.connect('172.30.1.18', 1883, 60)
+            self.client.connect(host_id, port, 60)
         except Exception as err:
             print(f"ERR ! /{err}/")
             
@@ -120,6 +125,8 @@ class Rccar:
         else:    
             if self.ultrasonic == None: self.ultrasonic = DistanceSensor(self.echo, self.trig) #Echo : 9, Trigger : 10
             if self.tilt == None: self.tilt = Tilt(self.tilt_pin)
+            # RGB LED Control
+            self.warnningControl("yellow")
             
     def setState(self, result):
         lock = threading.Lock()
@@ -153,6 +160,7 @@ class Rccar:
         if (dist < 0.5):
             detectTopic = self.topic + "/detect"
             detectMsg = f"Object Detect!! //Distance : {dist * 100}(cm)"
+            self.warnningControl("orange")
             
             # resultPub(detectTopic, self.client, 1, detectMsg)
             if (dist < 0.3): self.motorDrive.stop()            
@@ -170,12 +178,8 @@ class Rccar:
         else: self.stop_led.off() # forward or ect... led off
         
     def warnningControl(self, color):
-        if color == "r":
-            pass
-        elif color == "g":
-            pass
-        elif color == "b":
-            pass
+        self.rgb_led.color = Color(color)
+        self.rgb_led.blink(on_time=0.4, off_time=0.1, n=2)
         
     def buzzerControl(self, op, dist = 0):
         # op : {'on' : ultrasonic Detect, 'off' : ultrasonic Not Detect, 'crash' : tilt Detect }
@@ -193,8 +197,9 @@ class Rccar:
         
         try :
             if (self.tilt.getTilt()): 
-                self.warnningControl("r")
                 self.buzzerControl("crash")
+                self.warnningControl("red")
+                
                 # resultPub(tiltTopic, self.client, 1, tiltMsg)
         except FaultOperError as err:
             # resultPub(tiltTopic, self, client, 0, "잘못된 접근 - ERR_TILT")
@@ -206,8 +211,9 @@ if __name__ == "__main__":
     stopLEDs = (20, 21)
     buzzer = 2
     tilt = 3
+    rgbled = (17, 27, 22)
     
-    car = Rccar(leftMotor, rightMotor, echo, trig, stopLEDs, buzzer, tilt) 
+    car = Rccar(leftMotor, rightMotor, echo, trig, stopLEDs, buzzer, tilt, rgbled) 
     
     # --- mqtt 실행 ---
     client = car.getClient()
