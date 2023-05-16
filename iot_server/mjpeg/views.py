@@ -1,28 +1,29 @@
 from django.views.generic import TemplateView
-from django.http import HttpResponse, StreamingHttpResponse
+from django.http import HttpResponse, StreamingHttpResponse, JsonResponse
 from .picam import MJpegStreamCam
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
 from .models import SecFile
+from django.urls import path
+
+
 
 mjpegstream = MJpegStreamCam()
 
 class CamView(TemplateView):
-    template_name = "cam.html" # 렌더링할 템플릿 파일 경로
+    template_name = "cam.html" # 랜더링할 템플릿 파일 경로
 
-    def get_context_data(self): # context 변수 구성
+    def get_context_data(self):
         context = super().get_context_data()
         context["mode"] = self.request.GET.get("mode", "#")
         return context
     
-# def snapshot(request):
-#     image = mjpegstream.snapshot()
-#     return HttpResponse(image, content_type="image/jpeg")
-    
+
+
 def stream(request):
     return StreamingHttpResponse(mjpegstream, content_type='multipart/x-mixed-replace;boundary=--myboundary')
 
+##########################################################################################
 
 @csrf_exempt
 def upload(request):
@@ -46,4 +47,3 @@ class SecFileDetailView(generic.DetailView):
     model = SecFile
     template_name = 'mjpeg/sec_file_detail.html'
     context_object_name = 'vfile'
-
