@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button>
+    <Button
         android:id="@+id/boot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,13 +20,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <Button>
+
+    <Button
         android:id="@+id/controlpage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Button"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="160dp"
-        tools:layout_editor_absoluteY="552dp" />
+        tools:layout_editor_absoluteY="552dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
