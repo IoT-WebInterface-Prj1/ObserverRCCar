@@ -1,28 +1,29 @@
 package com.example.myapplication;
-import androidx.appcompat.app.AppCompatActivity
-import android.Manifest
-import android.content.Intent
+
 import android.content.pm.PackageManager
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.speech.RecognizerIntent
 import android.widget.Button
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import org.eclipse.paho.client.mqttv3.*
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
-import java.util.*
+import android.speech.*
+import androidx.core.content.ContextCompat
+import android.content.Intent
+import android.Manifest.permission.RECORD_AUDIO
 
-class control : AppCompatActivity() {
+
+class Control : AppCompatActivity() {
 
     private lateinit var mqttClient: MqttClient
 
-    private val RECORD_REQUEST_CODE = 101
+    private lateinit var speechRecognizer: SpeechRecognizer
+    private var isListening: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.control)
 
-        val brokerUrl = "tcp://localhost:1883"
+        val brokerUrl = "tcp://172.30.1.18:1883"
         val clientId = "android"
         mqttClient = MqttClient(brokerUrl, clientId, MemoryPersistence())
         mqttClient.connect()
@@ -49,11 +50,11 @@ class control : AppCompatActivity() {
 
         val recordButton = findViewById<Button>(R.id.record_button)
         recordButton.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), RECORD_REQUEST_CODE)
-            } else {
-                startSpeechToText()
-            }
+            if (isListening){
+                stopListening()
+            } else
+                startListening()
+
         }
 
         mqttClient.subscribe("control")
@@ -73,6 +74,7 @@ class control : AppCompatActivity() {
             override fun messageArrived(topic: String?, mqttMessage: MqttMessage?) {
                 if (topic == "control") {
                     val message = mqttMessage?.toString()
+
                 }
             }
 
@@ -86,32 +88,71 @@ class control : AppCompatActivity() {
         mqttClient.publish("control", MqttMessage(message.toByteArray()))
     }
 
-    private fun startSpeechToText() {
+    private fun startListening() {
+        val permission = RECORD_AUDIO
+        val granted = PackageManager.PERMISSION_GRANTED
+        val hasPermission = ContextCompat.checkSelfPermission(this, permission) == granted
+
+        if (!hasPermission) {
+
+            return
+        }
+
+        speechRecognizer.setRecognitionListener(object : RecognitionListener {
+            override fun onReadyForSpeech(params: Bundle?) {
+                // 시작 준비가 완료되면 호출
+            }
+
+            override fun onBeginningOfSpeech() {
+                // 음성 인식이 시작될 때 호출
+            }
+
+            override fun onEndOfSpeech() {
+                // 음성 인식이 종료시 호출
+            }
+
+            override fun onError(error: Int) {
+                // 음성 인식 중에 오류가 발생하면 호출
+                publish("AUDIO_ERROR")
+            }
+
+            override fun onResults(results: Bundle?) {
+                // 음성 인식 결과가 준비되면 호출
+                val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                if (matches != null && matches.isNotEmpty()) {
+                    val spokenText = matches[0]
+                    publish(spokenText)
+                }
+
+                isListening = false
+            }
+
+            override fun onPartialResults(partialResults: Bundle?) {
+                // 음성 인식 중에 부분 결과가 사용 가능하면 호출
+            }
+
+            override fun onEvent(eventType: Int, params: Bundle?) {
+                // 인식 이벤트가 발생할 때 호출
+            }
+        })
+
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to control")
-
-        // 구글 스피치 API 사용
-        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, packageName)
         intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
-        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        speechRecognizer.startListening(intent)
 
-        startActivityForResult(intent, 1)
+        isListening = true
     }
 
+    private fun stopListening() {
+        if (isListening) {
+            speechRecognizer.stopListening()
+            speechRecognizer.cancel()
+            speechRecognizer.destroy()
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
-            val results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            if (results != null && results.size > 0) {
-                val message = results[0]
-                publish(message)
-            }
+            isListening = false
         }
     }
 
-
 }
+
