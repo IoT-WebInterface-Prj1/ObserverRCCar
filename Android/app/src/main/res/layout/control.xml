@@ -3,10 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <WebView
+        android:id="@+id/streaming"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
+        android:layout_gravity="bottom|end"
         android:orientation="horizontal"
         android:padding="16dp">
 
@@ -15,8 +20,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Left"
-            android:background="#80000000"/>
+            android:background="#80000000"
+            android:text="Left" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -27,15 +32,15 @@
                 android:id="@+id/forward_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:background="#80000000"/>
+                android:background="#80000000"
+                android:text="for" />
 
             <Button
                 android:id="@+id/backward_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:background="#80000000"/>
+                android:background="#80000000"
+                android:text="back" />
 
         </LinearLayout>
 
@@ -44,6 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+<<<<<<< HEAD
             android:text="Right"
             android:background="#80000000"/>
 
@@ -55,6 +61,17 @@
             android:layout_gravity="bottom|left"
             ></Button>
 
+=======
+            android:background="#80000000"
+            android:text="Right" />
+>>>>>>> 7904b64baea3f66cb7353496c244abf3145fee79
     </LinearLayout>
 
+    <Button
+        android:id="@+id/record_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:text="Button"
+        android:layout_margin="16dp"/>
 </FrameLayout>
