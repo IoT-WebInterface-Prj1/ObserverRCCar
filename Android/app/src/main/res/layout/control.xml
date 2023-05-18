@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -17,39 +16,31 @@
 
         <Button
             android:id="@+id/left_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="#80000000"
             android:text="Left" />
 
-        <LinearLayout
+        <Button
+            android:id="@+id/forward_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="#80000000"
+            android:text="for" />
 
-            <Button
-                android:id="@+id/forward_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#80000000"
-                android:text="for" />
-
-            <Button
-                android:id="@+id/backward_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#80000000"
-                android:text="back" />
-
-        </LinearLayout>
+        <Button
+            android:id="@+id/backward_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#80000000"
+            android:text="back" />
 
         <Button
             android:id="@+id/right_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-<<<<<<< HEAD
             android:text="Right"
             android:background="#80000000"/>
 
@@ -61,10 +52,6 @@
             android:layout_gravity="bottom|left"
             ></Button>
 
-=======
-            android:background="#80000000"
-            android:text="Right" />
->>>>>>> 7904b64baea3f66cb7353496c244abf3145fee79
     </LinearLayout>
 
     <Button
@@ -74,4 +61,3 @@
         android:layout_gravity="top|start"
         android:text="Button"
         android:layout_margin="16dp"/>
-</FrameLayout>

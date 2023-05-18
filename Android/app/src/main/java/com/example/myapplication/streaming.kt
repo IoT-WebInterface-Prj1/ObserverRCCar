@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-package com.example.myapplication
-
-class streaming {
-=======
 package com.example.myapplication
 
 import android.os.Bundle
@@ -21,5 +16,4 @@ class streaming : AppCompatActivity() {
         webView.settings.javaScriptEnabled = true
         webView.loadUrl("http://127.0.0.1:8000/mjpeg/?mode=stream")
     }
->>>>>>> 7904b64baea3f66cb7353496c244abf3145fee79
 }
