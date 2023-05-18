@@ -14,8 +14,9 @@ class Control : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.control)
 
-        val brokerUrl = "tcp://172.30.1.18:1883"
+        val brokerUrl = "tcp://172.30.1.38:1883"
         val clientId = "android"
+
         mqttClient = MqttClient(brokerUrl, clientId, MemoryPersistence())
         mqttClient.connect()
 
@@ -39,12 +40,12 @@ class Control : AppCompatActivity() {
             publish("backward")
         }
 
-        val recordButton = findViewById<Button>(R.id.record_button)
-        recordButton.setOnClickListener {
+//        val recordButton = findViewById<Button>(R.id.record_button)
+//        recordButton.setOnClickListener {
+//
+//        }
 
-        }
-
-        mqttClient.subscribe("control")
+        mqttClient.subscribe("rccar/response/control")
 
         mqttClient.setCallback(object : MqttCallback {
             override fun connectionLost(throwable: Throwable?) {
@@ -59,7 +60,7 @@ class Control : AppCompatActivity() {
             }
 
             override fun messageArrived(topic: String?, mqttMessage: MqttMessage?) {
-                if (topic == "control") {
+                if (topic == "rccar/response/control") {
                     val message = mqttMessage?.toString()
 
                 }
@@ -72,7 +73,7 @@ class Control : AppCompatActivity() {
     }
 
     private fun publish(message: String) {
-        mqttClient.publish("control", MqttMessage(message.toByteArray()))
+        mqttClient.publish("rccar/drive/control", MqttMessage(message.toByteArray()))
     }
 
 }
