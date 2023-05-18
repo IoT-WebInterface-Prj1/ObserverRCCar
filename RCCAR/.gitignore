@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 *.log
 *.pot
 *.pyc
@@ -8,3 +9,6 @@ db.sqlite3
 db.sqlite3-journal
 media
 .vscode/
+=======
+__pycache__/
+>>>>>>> main

@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
 //          172.30.1.57
 
-            val brokerUrl = "tcp://172.30.1.18:1883" // 같은 와이파이 ip주소를 할당받아야
+            val brokerUrl = "tcp://172.30.1.75:1883" // 같은 와이파이 ip주소를 할당받아야
             val clientId = "android"
             try{
                 mqttClient = MqttClient(brokerUrl, clientId, MemoryPersistence())
@@ -74,12 +74,8 @@ class MainActivity : AppCompatActivity() {
         mqttClient.subscribe("rccar/response/boot")
     }
 
-    private fun startEngine(success: MqttMessage?) : Boolean {
-        if(success != null && success.toString() == "success"){
-            return true
-        }else{
-            return false
-        }
-
+    private fun startEngine(successMessage: MqttMessage) : Boolean {
+        val success = successMessage.toString()
+        return success == "success"
     }
 }
