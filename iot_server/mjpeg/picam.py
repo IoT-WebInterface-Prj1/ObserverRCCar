@@ -4,18 +4,29 @@ import numpy as np
 from picamera import PiCamera
 import picamera.array
 import cv2   
+<<<<<<< HEAD
 
 class MJpegStreamCam:
+=======
+from datetime import datetime
+
+class MJpegStreamCam:
+
+>>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
     def __init__(self, framerate=25, width=640, height=480):
         self.size = (width, height)
         self.framerate = framerate
 
+<<<<<<< HEAD
         # self.camera = cv2.VideoCapture(1)
+=======
+>>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
         self.camera = PiCamera()
         self.camera.rotation = 180
         self.camera.resolution = self.size
         self.camera.framerate = self.framerate
 
+<<<<<<< HEAD
     def snapshot(self):
         #ret, image = self.camera.read()
         #encode_param=[int(cv2.IMWRITE_JPEG_QUALITY), 80]
@@ -26,6 +37,24 @@ class MJpegStreamCam:
         frame.seek(0)
         return frame.getvalue() # byte 배열 리턴 
     
+=======
+    def __del__(self):
+        self.camera.close()
+
+    # def snapshot(self):
+    #     #ret, image = self.camera.read()
+    #     #encode_param=[int(cv2.IMWRITE_JPEG_QUALITY), 80]
+    #     #is_success, jpg = cv2.imencode('.jpeg', image, encode_param)
+
+    #     frame = io.BytesIO()
+    #     self.camera.capture(frame, 'jpeg', use_video_port=True)
+    #     frame.seek(0)
+    #     return frame.getvalue() # byte 배열 리턴 
+    
+    # detected - none detectd 화면 표시 / 초음파 센서 거리 화면 표시
+    # 화면 녹화 
+
+>>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
     def __iter__(self):
         encode_param=[int(cv2.IMWRITE_JPEG_QUALITY), 80]
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -37,14 +66,30 @@ class MJpegStreamCam:
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(80, 80))
                 
+<<<<<<< HEAD
                 for (x,y,w,h) in faces:
                     cv2.rectangle(frame,(x,y),(x+w,y+h),(0,0,255),2)
 
                 is_success, buffer = cv2.imencode(".jpg", frame, encode_param)
+=======
+                text = "none" if len(faces) == 0 else "detected"
+
+                cv2.putText(frame, text, (int(self.size[0]/2.5), 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                
+                for (x,y,w,h) in faces:
+                    cv2.rectangle(frame,(x,y),(x+w,y+h),(0,0,255),2)
+                
+                
+                is_success, buffer = cv2.imencode(".jpg", frame, encode_param)
+
+>>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
                 yield (b'--myboundary\n'
                     b'Content-Type: image/jpeg\n'
                     b'Content-Length: ' + f"{len(buffer)}".encode() + b'\n'
                     b'\n' + buffer.tobytes() + b'\n')
                 
                 stream.truncate(0)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
