@@ -51,9 +51,4 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-<<<<<<< HEAD
-    implementation 'com.google.android.gms:play-services-speech:16.0.0'
-=======
-    implementation 'com.google.android.gms:play-services-speech:12.8.0'
->>>>>>> 7904b64baea3f66cb7353496c244abf3145fee79
 }
