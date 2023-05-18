@@ -7,26 +7,36 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button>
+    <Button
         android:id="@+id/boot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="168dp"
-        android:layout_marginTop="345dp"
-        android:layout_marginEnd="152dp"
-        android:layout_marginBottom="338dp"
         android:text="Boot"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <Button>
-        android:id="@+id/controlpage"
+
+    <ImageView
+        android:id="@+id/btnKakaoLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginTop="300dp"
+        app:layout_constraintBottom_toTopOf="@+id/txtLoginWarn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/kakao_login_medium_narrow" />
+
+    <TextView
+        android:id="@+id/txtLoginWarn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="160dp"
-        tools:layout_editor_absoluteY="552dp" />
+        android:text="로그인이 필요합니다."
+        android:textColor="#D37979"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnKakaoLogin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

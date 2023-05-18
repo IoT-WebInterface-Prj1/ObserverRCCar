@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31" >
         <activity
             android:name=".MainActivity"
@@ -23,6 +24,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- kakao Redirect URI -->
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
+                <data android:host="oauth"
+                    android:scheme="kakao5bd2b9d1aea2d83bc9f2cda6481a6e32" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Control"
+            android:label="Control Activity" />
     </application>
 
 </manifest>
