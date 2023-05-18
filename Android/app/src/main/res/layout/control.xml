@@ -16,9 +16,8 @@
 
         <Button
             android:id="@+id/left_button"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="#80000000"
             android:text="Left" />
 
@@ -38,26 +37,18 @@
 
         <Button
             android:id="@+id/right_button"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="Right"
             android:background="#80000000"/>
 
-
         <Button
             android:id="@+id/record_button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="bottom|left"
-            ></Button>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:text="Button"
+            android:layout_margin="16dp"/>
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/record_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|start"
-        android:text="Button"
-        android:layout_margin="16dp"/>
+</FrameLayout>
