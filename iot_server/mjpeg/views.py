@@ -7,7 +7,6 @@ from .models import SecFile
 from django.urls import path
 
 
-
 mjpegstream = MJpegStreamCam()
 
 class CamView(TemplateView):
@@ -18,7 +17,6 @@ class CamView(TemplateView):
         context["mode"] = self.request.GET.get("mode", "#")
         return context
     
-
 
 def stream(request):
     return StreamingHttpResponse(mjpegstream, content_type='multipart/x-mixed-replace;boundary=--myboundary')

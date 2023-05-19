@@ -10,10 +10,7 @@
         <a href="?mode=stream">스트림 보기</a>
     </div>
     <br>
-    {% if mode == "#" %}
-        <img id="image" />
-    {% elif mode == "stream" %}
         <img id="image" src="{% url 'stream'%}"/>
-    {% endif %}
+
 </body>
 </html>
