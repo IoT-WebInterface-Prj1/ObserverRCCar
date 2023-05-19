@@ -41,6 +41,7 @@ class SecFileListView(generic.ListView):
     template_name = 'mjpeg/sec_file_list.html'
     context_object_name = 'sec_files'
 
+
 class SecFileDetailView(generic.DetailView):
     model = SecFile
     template_name = 'mjpeg/sec_file_detail.html'

@@ -82,9 +82,9 @@ class MJpegStreamCam:
 
 
     # frames_to_save 리스트에 있는 프레임을 mp4 형식으로 변환
-    def save_frames_as_mp4(self):
+    def save_frames_as_mp4(self, tilt=""):
         dtime = datetime.now().strftime('%y%m%d_%H%M%S')
-        file_path = os.path.join(self.save_directory, "recorded{0}.mp4".format(dtime))
+        file_path = os.path.join(self.save_directory, "recorded_{0}{1}.mp4".format(dtime, tilt))
         writer = cv2.VideoWriter(file_path, cv2.VideoWriter_fourcc(*'mp4v'), self.framerate, self.size)
 
         for frame in self.frames_to_save:
@@ -94,14 +94,14 @@ class MJpegStreamCam:
         
     # 녹화 파일 관리 메소드
     def cleanup_files(self):
-        print("파일 정리 하실게요~")
         files = sorted(os.listdir(self.save_directory))
         num_files = len(files)
 
         if num_files > self.max_files: # media 폴더에 파일이 self.max_files개 보다 많다면 가장 오래된 파일 삭제
             files_to_delete = files[:num_files - self.max_files]
-        
+
             for file_name in files_to_delete:
+                print("파일 삭제:", file_name)
                 file_path = os.path.join(self.save_directory, file_name)
                 subprocess.run(["rm", file_path])
 
@@ -109,7 +109,7 @@ class MJpegStreamCam:
     def tilt_on(self):
         print("@@@충격 감지@@@")
         # 현재 self.frames_to_save 리스트에 있는 프레임 개수 상관없이 즉시 mp4로 저장
-        self.save_frames_as_mp4()
+        self.save_frames_as_mp4(tilt="_tilt")
         self.frames_to_save=[]
 
         files = sorted(os.listdir(self.save_directory))
