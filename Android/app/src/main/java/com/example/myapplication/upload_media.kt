@@ -1,6 +1,6 @@
 //import android.os.Bundle
 //import androidx.appcompat.app.AppCompatActivity
-//import androidx.recyclerview.widget.RecyclerView
+//import androidx.recyclerview.widget.RecyclerView.Adapter
 //import com.example.myapplication.Media
 //import com.example.myapplication.Mediadapter
 //import com.example.myapplication.R
@@ -13,13 +13,13 @@
 //
 //
 //interface ApiService{
-//    @POST("d")
-//    fun getVideoList(): Call<List<Media>>
+//    @POST("upload/")
+//    fun getVideoList(): Call<Media>
 //}
 //
 //class upload_media: AppCompatActivity(){
 //    private val retrofit = Retrofit.Builder()
-//        .baseUrl("")
+//        .baseUrl("http://127.0.0.1:8000/mjpeg/")
 //        .addConverterFactory(GsonConverterFactory.create())
 //        .build()
 //
@@ -30,12 +30,12 @@
 //        setContentView(R.layout.media_list)
 //
 //        val call = apiService.getVideoList()
-//        call.enqueue(object : Callback<List<Media>> {
-//            override fun onResponse(call: Call<List<Media>>, response: Response<List<Media>>) {
-//                if (response.isSuccessful && mediaList != null) {
-//                    val mediaList = response.body()
-//                    val adapter = Mediadapter(mediaList)
-//                    recyclerView.adapter = adapter
+//        call.enqueue(object : Callback<Media> {
+//            override fun onResponse(call: Call<Media>, response: Response<Media>) {
+//                if (response.isSuccessful && apiService!= null) {
+//                    val media = response.body()
+//                    val adapter = Mediadapter(media)
+//                    val recyclerView = Adapter(adapter)
 //                } else {
 //                    TODO("Not yet implemented")
 //                }

@@ -2,18 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" >
 
-<<<<<<< HEAD
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:networkSecurityConfig="@xml/network_security_config"
-=======
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>
-
-    <application
->>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -26,22 +20,14 @@
         tools:targetApi="31" >
         <activity
             android:name=".MainActivity"
-<<<<<<< HEAD
-            android:screenOrientation ="sensorLandscape"
-            android:exported="true" >
-=======
             android:screenOrientation="fullSensor"
             android:exported="true">
->>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
-
-=======
         <!-- kakao Redirect URI -->
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
@@ -51,18 +37,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
+                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth"
+                 kakao5bd2b9d1aea2d83bc9f2cda6481a6e32-->
                 <data android:host="oauth"
-                    android:scheme="kakao5bd2b9d1aea2d83bc9f2cda6481a6e32" />
+                    android:scheme="kakaoa3947b6bc0acccc64e335489d5f9aab3://oauth" />
             </intent-filter>
         </activity>
->>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
+
         <activity
             android:name=".Control"
             android:label="Control Activity" />
     </application>
-<<<<<<< HEAD
-
-=======
->>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
 </manifest>

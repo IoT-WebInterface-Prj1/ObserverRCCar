@@ -28,7 +28,7 @@ class Control : AppCompatActivity() {
 //        setContentView(binding.root)
 
         // MQTT----------------
-        val brokerUrl = "tcp://172.30.1.38:1883"
+        val brokerUrl = "tcp://172.30.1.75:1883"
         val clientId = "android"
         mqttClient = MqttClient(brokerUrl, clientId, MemoryPersistence())
         mqttClient.connect()

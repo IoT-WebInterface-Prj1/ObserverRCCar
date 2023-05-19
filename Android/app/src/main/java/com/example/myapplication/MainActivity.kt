@@ -36,20 +36,20 @@ class MainActivity : AppCompatActivity() {
         var keyHash = Utility.getKeyHash(this)
         Log.d("Hash", keyHash)
         // 카카오 SDK 초기화
-        KakaoSdk.init(this, "5bd2b9d1aea2d83bc9f2cda6481a6e32")
+        KakaoSdk.init(this,"jeSpIpID0RZjHGncVuOXRRTCY4=")
 
         // SharedPreferences --- 로그인여부와 token 받아오기
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         editor = sharedPreferences.edit()
 
-        var isLogin = sharedPreferences.getBoolean("is_login", false)
+        var isLogin = sharedPreferences.getBoolean("is_login", true)
         var getToken = sharedPreferences.getString("get_token", "")
         Log.e(TAG, "${isLogin}")
         Log.e(TAG, "${getToken}")
         // ---------------------
 //          172.30.1.57
 
-        val brokerUrl = "tcp://172.30.1.38:1883" // 같은 와이파이 ip주소를 할당받아야
+        val brokerUrl = "tcp://172.30.1.75:1883" // 같은 와이파이 ip주소를 할당받아야
         val clientId = "android"
         try{
             mqttClient = MqttClient(brokerUrl, clientId, MemoryPersistence())

@@ -25,7 +25,7 @@
 //
 //data class Media(val title: String, val url: String, val upload_date: String)
 //
-//class Mediadapter(private val mediaList: List<Media>)
+//class Mediadapter(private val media: Media)
 //    : RecyclerView.Adapter<Mediadapter.ViewHolder>(){
 //
 //    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder{
@@ -34,14 +34,15 @@
 //    }
 //
 //    override fun onBindViewHolder(holder: ViewHolder, position: Int){
-//        val media = mediaList[position]
+////        val media = mediaList[position]
 //        holder.titleTextView.text = media.title
 //        // 미디어 파일 다운로드 및 저장
-//        downloadMediaFile(mediaList[position].url, holder)
+////        downloadMediaFile(mediaList[position].url, holder)
+//        downloadMediaFile(media.url,holder)
 //    }
 //
 //    override fun getItemCount(): Int {
-//        return mediaList.size
+////        return mediaList.size
 //    }
 //
 //    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
