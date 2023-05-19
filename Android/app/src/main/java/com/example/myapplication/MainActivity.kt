@@ -48,8 +48,8 @@ class MainActivity : AppCompatActivity() {
         // ---------------------
 //          172.30.1.57
 
-        val brokerUrl = "tcp://172.30.1.38:1883" // 같은 와이파이 ip주소를 할당받아야
-        val clientId = "android"
+        val brokerUrl = "tcp://172.30.1.73:1883" // 같은 와이파이 ip주소를 할당받아야
+        val clientId = "android_boot"
         try{
             mqttClient = MqttClient(brokerUrl, clientId, MemoryPersistence())
             val options = MqttConnectOptions()
@@ -73,7 +73,13 @@ class MainActivity : AppCompatActivity() {
                 }
                 else if (token != null) { // 제대로 로그인이 되었다면 login 여부와 token 을 저장
                     editor.putBoolean("is_login", true)
+
                     isLogin = true
+                    kakaoButton.visibility = View.GONE
+                    txtLogin.visibility = View.GONE
+
+                    startButton.visibility = View.VISIBLE
+
                     editor.putString("get_token", token?.accessToken)
                     editor.commit()
                     Log.i(TAG, "Login Success with Account! ${token.accessToken}")
@@ -110,22 +116,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
         // ----------------------- Kakao Login 확인
-
-        Log.d("IS LOGIN", "${isLogin}")
-        // 로그인 상태이면 카카오로그인 버튼, 텍스트를 숨기기
-        // boot 버튼 불러오기
-        if (isLogin) {
+        else {
+            // 로그인 상태이면 카카오로그인 버튼, 텍스트를 숨기기
+            // boot 버튼 불러오기
             kakaoButton.visibility = View.GONE
             txtLogin.visibility = View.GONE
 
             startButton.visibility = View.VISIBLE
+        }
 
-            startButton.setOnClickListener {
-                val topic = "rccar/drive/boot"
-                val message = "on"
-                val mqttMessage = MqttMessage(message.toByteArray())
-                mqttClient.publish(topic, mqttMessage)
-            }
+        startButton.setOnClickListener {
+            val topic = "rccar/drive/boot"
+            val message = "on"
+            val mqttMessage = MqttMessage(message.toByteArray())
+            mqttClient.publish(topic, mqttMessage)
         }
 
         mqttClient.setCallback(object : MqttCallback {
