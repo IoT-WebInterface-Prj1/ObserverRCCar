@@ -17,12 +17,6 @@ import com.example.myapplication.databinding.ControlBinding
 
 
 class Control : AppCompatActivity() {
-//    companion object {
-//        var URL = "URL"
-//    }
-//
-//    val binding by lazy { ControlBinding.inflate(layoutInflater)}
-
     private lateinit var mqttClient: MqttClient
 
 //    private lateinit var speechRecognizer: SpeechRecognizer
@@ -34,10 +28,16 @@ class Control : AppCompatActivity() {
 //        setContentView(binding.root)
 
         // MQTT----------------
-        val brokerUrl = "tcp://172.30.1.38:1883"
-        val clientId = "android"
-        mqttClient = MqttClient(brokerUrl, clientId, MemoryPersistence())
-        mqttClient.connect()
+        val brokerUrl = "tcp://172.30.1.73:1883"
+        val clientId = "android_control"
+        try{
+            mqttClient = MqttClient(brokerUrl, clientId, MemoryPersistence())
+            val options = MqttConnectOptions()
+            options.connectionTimeout = 5
+            mqttClient.connect(options)
+        }catch(ex: MqttException){
+            ex.printStackTrace()
+        }
         // ---------------------
 
         // WebView ---------------
@@ -76,8 +76,6 @@ class Control : AppCompatActivity() {
 //        }
         // -------------------button
 
-        mqttClient.subscribe("rccar/response/control")
-
         mqttClient.setCallback(object : MqttCallback {
             override fun connectionLost(throwable: Throwable?) {
                 if (throwable != null){
@@ -91,7 +89,7 @@ class Control : AppCompatActivity() {
             }
 
             override fun messageArrived(topic: String?, mqttMessage: MqttMessage?) {
-                if (topic == "rccar/response/control") {
+                if (topic != null && mqttMessage != null && topic == "rccar/response/control") {
                     val message = mqttMessage?.toString()
                     Log.d("MESSAGE", "${message}")
                 }
@@ -101,9 +99,11 @@ class Control : AppCompatActivity() {
                 println("Message delivered")
             }
         })
+        mqttClient.subscribe("rccar/response/control")
     }
 
     private fun publish(message: String) {
+        Log.e("MQTT CONNECT", "${mqttClient.isConnected()}")
         mqttClient.publish("rccar/drive/control", MqttMessage(message.toByteArray()))
     }
 
