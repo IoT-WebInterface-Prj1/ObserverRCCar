@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+
 import androidx.appcompat.app.AppCompatActivity
 import android.Manifest
 import android.content.Intent
@@ -8,16 +9,25 @@ import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.webkit.WebView
 import android.widget.Button
+import android.widget.Toast
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import org.eclipse.paho.client.mqttv3.*
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 import java.util.*
+import android.speech.RecognitionListener
+import android.speech.SpeechRecognizer
+
+
+
+
 
 class Control : AppCompatActivity() {
-
     private lateinit var mqttClient: MqttClient
+    private lateinit var speechRecognizer: SpeechRecognizer
+    private lateinit var toast: Toast
+    private var isListening: Boolean = false
 
     private val RECORD_REQUEST_CODE = 101
 
@@ -25,11 +35,10 @@ class Control : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.control)
 
-
-
+        toast = Toast.makeText(this, "", Toast.LENGTH_SHORT)
 
         // MQTT----------------
-        val brokerUrl = "tcp://172.30.1.75:1883"
+        val brokerUrl = "tcp://192.168.0.5:1883"
         val clientId = "android_control"
         val payload = "disconnected".toByteArray(Charsets.UTF_8)
         try{
@@ -49,11 +58,66 @@ class Control : AppCompatActivity() {
 //        webView.loadUrl("http://172.30.1.29:8000/mjpeg/?mode=stream")
         // -----------------------
 
-        // Button ------------------
-        val rightButton = findViewById<Button>(R.id.right_button)
-        rightButton.setOnClickListener {
-            publish("right")
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(applicationContext)
+
+        speechRecognizer.setRecognitionListener(object : RecognitionListener {
+            override fun onReadyForSpeech(params: Bundle?) {
+
+            }
+
+            override fun onBeginningOfSpeech() {
+
+            }
+
+            override fun onEndOfSpeech() {
+
+            }
+
+            override fun onBufferReceived(buffer: ByteArray?) {
+
+            }
+
+            override fun onError(error: Int) {
+
+                publish("AUDIO_ERROR")
+            }
+
+            override fun onResults(results: Bundle?) {
+                val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                if (matches != null && matches.isNotEmpty()) {
+                    val spokenText = matches[0]
+                    if (spokenText.contains("시동")) {
+                        publish("시동")
+                    } else if (spokenText.contains("멈춰")) {
+                        publish("멈춰")
+                    }
+                }
+
+                isListening = false
+            }
+
+            override fun onRmsChanged(rmsdB: Float) {
+
+            }
+
+            override fun onPartialResults(partialResults: Bundle?) {
+
+            }
+
+            override fun onEvent(eventType: Int, params: Bundle?) {
+
+            }
+        })
+
+        val recordButton = findViewById<Button>(R.id.record_button)
+        recordButton.setOnClickListener {
+            if (isListening) {
+                stopListening()
+            } else {
+                startListening()
+            }
         }
+
 
         val leftButton = findViewById<Button>(R.id.left_button)
         leftButton.setOnClickListener {
@@ -70,24 +134,14 @@ class Control : AppCompatActivity() {
             publish("backward")
         }
 
-//        val recordButton = findViewById<Button>(R.id.record_button)
-//        recordButton.setOnClickListener {
-//            if (isListening){
-//                stopListening()
-//            } else
-//                startListening()
-//
-//        }
-        // -------------------button
+        mqttClient.subscribe("rccar/response/control")
 
         mqttClient.setCallback(object : MqttCallback {
             override fun connectionLost(throwable: Throwable?) {
-                if (throwable != null){
-                    throwable.printStackTrace()
-                }
+                throwable?.printStackTrace()
                 try {
                     mqttClient.reconnect()
-                } catch(ex: MqttException){
+                } catch (ex: MqttException) {
                     ex.printStackTrace()
                 }
             }
@@ -96,7 +150,12 @@ class Control : AppCompatActivity() {
 
                 if (topic != null && mqttMessage != null && topic == "rccar/response/control") {
                     val message = mqttMessage?.toString()
-                    Log.d("MESSAGE", "${message}")
+                    Log.d("MESSAGE", "$message")
+
+                    runOnUiThread{
+                        toast.setText(message)
+                        toast.show()
+                    }
                 }
             }
 
@@ -114,69 +173,30 @@ class Control : AppCompatActivity() {
         mqttClient.publish("rccar/drive/control", MqttMessage(message.toByteArray()))
     }
 
-//    private fun startListening() {
-//        val permission = RECORD_AUDIO
-//        val granted = PackageManager.PERMISSION_GRANTED
-//        val hasPermission = ContextCompat.checkSelfPermission(this, permission) == granted
-//
-//        if (!hasPermission) {
-//
-//            return
-//        }
-//
-//        speechRecognizer.setRecognitionListener(object : RecognitionListener {
-//            override fun onReadyForSpeech(params: Bundle?) {
-//                // 시작 준비가 완료되면 호출
-//            }
-//
-//            override fun onBeginningOfSpeech() {
-//                // 음성 인식이 시작될 때 호출
-//            }
-//
-//            override fun onEndOfSpeech() {
-//                // 음성 인식이 종료시 호출
-//            }
-//
-//            override fun onError(error: Int) {
-//                // 음성 인식 중에 오류가 발생하면 호출
-//                publish("AUDIO_ERROR")
-//            }
-//
-//            override fun onResults(results: Bundle?) {
-//                // 음성 인식 결과가 준비되면 호출
-//                val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-//                if (matches != null && matches.isNotEmpty()) {
-//                    val spokenText = matches[0]
-//                    publish(spokenText)
-//                }
-//
-//                isListening = false
-//            }
-//
-//            override fun onPartialResults(partialResults: Bundle?) {
-//                // 음성 인식 중에 부분 결과가 사용 가능하면 호출
-//            }
-//
-//            override fun onEvent(eventType: Int, params: Bundle?) {
-//                // 인식 이벤트가 발생할 때 호출
-//            }
-//        })
-//
-//        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-//        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-//        intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
-//        speechRecognizer.startListening(intent)
-//
-//        isListening = true
-//    }
-//
-//    private fun stopListening() {
-//        if (isListening) {
-//            speechRecognizer.stopListening()
-//            speechRecognizer.cancel()
-//            speechRecognizer.destroy()
-//
-//            isListening = false
-//        }
-//    }
+    private fun startListening() {
+        val permission = Manifest.permission.RECORD_AUDIO
+        val granted = PackageManager.PERMISSION_GRANTED
+        val hasPermission = ContextCompat.checkSelfPermission(this, permission) == granted
+
+        if (!hasPermission) {
+            return
+        }
+
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
+        speechRecognizer.startListening(intent)
+
+        isListening = true
+    }
+
+    private fun stopListening() {
+        if (isListening) {
+            speechRecognizer.stopListening()
+            speechRecognizer.cancel()
+            speechRecognizer.destroy()
+
+            isListening = false
+        }
+    }
 }
