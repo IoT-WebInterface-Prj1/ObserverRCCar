@@ -11,8 +11,11 @@ from .models import SecFile
 from django.urls import path
 
 
+<<<<<<< HEAD
 >>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
 
+=======
+>>>>>>> 1d90a286bb2381bf0aac41051db79676dc4f07f1
 mjpegstream = MJpegStreamCam()
 
 class CamView(TemplateView):
@@ -31,7 +34,6 @@ def snapshot(request):
 def stream(request):
     return StreamingHttpResponse(mjpegstream, content_type='multipart/x-mixed-replace;boundary=--myboundary')
 =======
-
 
 def stream(request):
     return StreamingHttpResponse(mjpegstream, content_type='multipart/x-mixed-replace;boundary=--myboundary')
