@@ -7,30 +7,9 @@
 </head>
 <body>
     <div>
-<<<<<<< HEAD
-        <a href="?mode=snapshot">스냅샷 보기</a> |
-=======
->>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
         <a href="?mode=stream">스트림 보기</a>
     </div>
     <br>
-<<<<<<< HEAD
-    {% if mode == "#" %}
-<<<<<<< HEAD
-        <img id="image"/>
-    {% elif mode == "snapshot" %}
-        <img id="image" src="{% url 'snapshot' %}"/>
-    {% elif mode == "stream" %}
         <img id="image" src="{% url 'stream' %}"/>
-=======
-        <img id="image" />
-    {% elif mode == "stream" %}
-        <img id="image" src="{% url 'stream'%}"/>
->>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
-    {% endif %}
-=======
-        <img id="image" src="{% url 'stream'%}"/>
-
->>>>>>> 1d90a286bb2381bf0aac41051db79676dc4f07f1
 </body>
 </html>

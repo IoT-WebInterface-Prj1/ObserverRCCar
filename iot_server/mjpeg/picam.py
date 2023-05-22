@@ -3,23 +3,14 @@ import time
 import numpy as np
 from picamera import PiCamera
 import picamera.array
-import cv2   
-<<<<<<< HEAD
-
-class MJpegStreamCam:
-=======
+import cv2  
 from datetime import datetime
 import paho.mqtt.client as mqtt
 import os
 import subprocess
-import requests
+import requests 
 
 class MJpegStreamCam:
-<<<<<<< HEAD
-
->>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
-=======
->>>>>>> 1d90a286bb2381bf0aac41051db79676dc4f07f1
     def __init__(self, framerate=25, width=640, height=480):
         self.size = (width, height)
         self.framerate = framerate
@@ -27,46 +18,15 @@ class MJpegStreamCam:
         self.max_files = 5  # 최대 5개 (약 50초)의 영상 관리
         self.save_directory = "/home/pi/workspace/iot_server/media/temp_video" # 프레임 to .mp4 변환 후 저장할 폴더
 
-<<<<<<< HEAD
-        # self.camera = cv2.VideoCapture(1)
-=======
->>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
         self.camera = PiCamera()
         self.camera.rotation = 0
         self.camera.resolution = self.size
         self.camera.framerate = self.framerate
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    def snapshot(self):
-        #ret, image = self.camera.read()
-        #encode_param=[int(cv2.IMWRITE_JPEG_QUALITY), 80]
-        #is_success, jpg = cv2.imencode('.jpeg', image, encode_param)
 
-        frame = io.BytesIO()
-        self.camera.capture(frame, 'jpeg', use_video_port=True)
-        frame.seek(0)
-        return frame.getvalue() # byte 배열 리턴 
-    
-=======
     def __del__(self):
         self.camera.close()
 
-    # def snapshot(self):
-    #     #ret, image = self.camera.read()
-    #     #encode_param=[int(cv2.IMWRITE_JPEG_QUALITY), 80]
-    #     #is_success, jpg = cv2.imencode('.jpeg', image, encode_param)
-
-    #     frame = io.BytesIO()
-    #     self.camera.capture(frame, 'jpeg', use_video_port=True)
-    #     frame.seek(0)
-    #     return frame.getvalue() # byte 배열 리턴 
-    
-    # detected - none detectd 화면 표시 / 초음파 센서 거리 화면 표시
-    # 화면 녹화 
-
->>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
-=======
         self.client = mqtt.Client()
         self.host_id = '172.30.1.75'
         self.port = 1883
@@ -83,7 +43,6 @@ class MJpegStreamCam:
     def __del__(self):
         self.camera.close()
 
->>>>>>> 1d90a286bb2381bf0aac41051db79676dc4f07f1
     def __iter__(self):
         encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 80]
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -94,17 +53,7 @@ class MJpegStreamCam:
                 frame = stream.array
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(80, 80))
-<<<<<<< HEAD
-                
-<<<<<<< HEAD
-                for (x,y,w,h) in faces:
-                    cv2.rectangle(frame,(x,y),(x+w,y+h),(0,0,255),2)
 
-                is_success, buffer = cv2.imencode(".jpg", frame, encode_param)
-=======
-=======
-
->>>>>>> 1d90a286bb2381bf0aac41051db79676dc4f07f1
                 text = "none" if len(faces) == 0 else "detected"
                 cv2.putText(frame, text, (int(self.size[0] / 2.5), 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
@@ -114,28 +63,17 @@ class MJpegStreamCam:
                 is_success, buffer = cv2.imencode(".jpg", frame, encode_param)
                 image = buffer.tobytes()
 
-<<<<<<< HEAD
->>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
-                yield (b'--myboundary\n'
-=======
                 # 프레임 저장 (1초에 25개)
                 self.frames_to_save.append(frame)
 
                 yield (
                     b'--myboundary\n'
->>>>>>> 1d90a286bb2381bf0aac41051db79676dc4f07f1
                     b'Content-Type: image/jpeg\n'
                     b'Content-Length: ' + str(len(buffer)).encode() + b'\n'
                     b'\n' + image + b'\n'
                 )
 
                 stream.truncate(0)
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
-=======
 
                 if self.istilt:
                     self.tilt_on()
@@ -146,11 +84,10 @@ class MJpegStreamCam:
                     self.frames_to_save = []  # 저장한 프레임 리스트 초기화
                     self.cleanup_files()
 
-
     # frames_to_save 리스트에 있는 프레임을 mp4 형식으로 변환
-    def save_frames_as_mp4(self):
+    def save_frames_as_mp4(self, tilt=""):
         dtime = datetime.now().strftime('%y%m%d_%H%M%S')
-        file_path = os.path.join(self.save_directory, "recorded{0}.mp4".format(dtime))
+        file_path = os.path.join(self.save_directory, "recorded_{0}{1}.mp4".format(dtime, tilt))
         writer = cv2.VideoWriter(file_path, cv2.VideoWriter_fourcc(*'mp4v'), self.framerate, self.size)
 
         for frame in self.frames_to_save:
@@ -160,14 +97,14 @@ class MJpegStreamCam:
         
     # 녹화 파일 관리 메소드
     def cleanup_files(self):
-        print("파일 정리 하실게요~")
         files = sorted(os.listdir(self.save_directory))
         num_files = len(files)
 
         if num_files > self.max_files: # media 폴더에 파일이 self.max_files개 보다 많다면 가장 오래된 파일 삭제
             files_to_delete = files[:num_files - self.max_files]
-        
+
             for file_name in files_to_delete:
+                print("파일 삭제:", file_name)
                 file_path = os.path.join(self.save_directory, file_name)
                 subprocess.run(["rm", file_path])
 
@@ -175,7 +112,7 @@ class MJpegStreamCam:
     def tilt_on(self):
         print("@@@충격 감지@@@")
         # 현재 self.frames_to_save 리스트에 있는 프레임 개수 상관없이 즉시 mp4로 저장
-        self.save_frames_as_mp4()
+        self.save_frames_as_mp4(tilt="_tilt")
         self.frames_to_save=[]
 
         files = sorted(os.listdir(self.save_directory))
@@ -223,4 +160,3 @@ class MJpegStreamCam:
         if router=="tilt":
             print("기울었다고 전해라")
             self.istilt=True
->>>>>>> 1d90a286bb2381bf0aac41051db79676dc4f07f1
