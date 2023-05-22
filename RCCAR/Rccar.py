@@ -121,7 +121,7 @@ class Rccar:
             self.ultrasonic = None
             self.tilt = None
             
-            serverPub("boot", "OFF", self.client)
+            # serverPub("boot", "OFF", self.client)
         # Boot ON -> Sensor ON
         else:    
             if self.ultrasonic == None: self.ultrasonic = DistanceSensor(self.echo, self.trig) #Echo : 9, Trigger : 10
@@ -129,7 +129,7 @@ class Rccar:
             # RGB LED Control
             self.warnningControl("yellow")
             
-            serverPub("boot", "ON", self.client)
+            # serverPub("boot", "ON", self.client)
             
     def setState(self, result):
         lock = threading.Lock()

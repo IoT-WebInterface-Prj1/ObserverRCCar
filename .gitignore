@@ -1,4 +1,4 @@
 __pycache__/
-media/sec_file/
-media/temp_video/
+media/sec_file/*
+media/temp_video/*
 db.sqlite3

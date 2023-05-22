@@ -16,17 +16,13 @@ class MJpegStreamCam:
         self.framerate = framerate
         self.frames_to_save = [] # 프레임 저장 공간
         self.max_files = 5  # 최대 5개 (약 50초)의 영상 관리
-        self.save_tempdirectory = "/home/pi/workspace/iot_server/media/temp_video" # 프레임 to .mp4 변환 후 저장할 폴더
-        self.save_updirectory = "/home/pi/workspace/iot_server/media/sec_file"
+        self.save_tempdirectory = "/home/yannju/IoTPrj2/iot_server/media/temp_video" # 프레임 to .mp4 변환 후 저장할 폴더
+        self.save_updirectory = "/home/yannju/IoTPrj2/iot_server/media/sec_file"
 
         self.camera = PiCamera()
         self.camera.rotation = 0
         self.camera.resolution = self.size
         self.camera.framerate = self.framerate
-
-
-    def __del__(self):
-        self.camera.close()
 
         self.client = mqtt.Client()
         self.host_id = '172.30.1.120'
@@ -80,7 +76,7 @@ class MJpegStreamCam:
                     self.tilt_on()
 
                 print(len(self.frames_to_save))
-                if len(self.frames_to_save) == 250:
+                if len(self.frames_to_save) == 20:
                     self.save_frames_as_mp4()  # 250개의 프레임을 한 번에 .mp4 형식으로 저장
                     self.frames_to_save = []  # 저장한 프레임 리스트 초기화
                     self.cleanup_files()
@@ -112,11 +108,7 @@ class MJpegStreamCam:
 
     # 녹화 파일 관리 메소드
     def cleanup_files(self):
-<<<<<<< HEAD
         files = sorted(os.listdir(self.save_tempdirectory))
-=======
-        files = sorted(os.listdir(self.save_directory))
->>>>>>> ce8d818c9022cf431aedac863aa1ea109ec00407
         num_files = len(files)
 
         if num_files > self.max_files: # media 폴더에 파일이 self.max_files개 보다 많다면 가장 오래된 파일 삭제
@@ -124,11 +116,7 @@ class MJpegStreamCam:
 
             for file_name in files_to_delete:
                 print("파일 삭제:", file_name)
-<<<<<<< HEAD
                 file_path = os.path.join(self.save_tempdirectory, file_name)
-=======
-                file_path = os.path.join(self.save_directory, file_name)
->>>>>>> ce8d818c9022cf431aedac863aa1ea109ec00407
                 subprocess.run(["rm", file_path])
 
     # 충격 감지
