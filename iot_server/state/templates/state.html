@@ -4,8 +4,102 @@
     <meta charset="UTF-8">
     <meta name="Rccar State" content="width=device-width, initial-scale=1.0">
     <title>RCCAR State</title>
+    <style type="text/css">
+        .parent{
+            width: 90%;
+            margin: 10px auto;
+            display: flex;
+        }
+        .child{
+            border: 1px solid green;
+            flex:1;
+            margin: 0px 5%;
+            width:30%;
+            box-sizing: border-box;
+        }
+    </style>
+    <!--Font Awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     
+    <div class = "parent">
+        <div class = "child">
+                <div style = "padding : 3%; font: 1.3em bold; text-align:center">주행거리 </div>
+                <div class="fa-solid fa-car-side"style = 'margin : 1% 30%; font-size:5em'></div>
+                <div style = "font: 1.3em bold;  text-align:center">
+                    <span id = 'distance'>dd</span>km
+                </div>
+        </div>
+        <div class = "child">
+                <div style = "padding : 3%; font: 1.3em bold; text-align:center">시동여부 </div>
+                <div class="fa-solid fa-power-off" style = 'font-size:5em; margin : 1% 30%;'></div>
+                <div id ='boot' style = "font: 1.3em bold;  text-align:center"></div>
+        </div>
+        <div class = "child">
+                <div style = "padding : 3%; font: 1.3em bold; text-align:center">장애물 감지 횟수 </div>
+                <div class="fa-solid fa-object-ungroup" style = 'margin : 1% 30%; font-size:5em'></div>
+                <div style = "font: 1.3em bold;  text-align:center">
+                    <span id = 'obstacle'></span>회
+                </div>
+        </div>
+        <div class = "child">
+                <div style = "padding : 3%; font: 1.3em bold; text-align:center">충돌 감지 횟수 </div>
+                <div class="fa-solid fa-car-burst" style = 'margin : 1% 30%; font-size:5em'></div>
+                <div style = "font: 1.3em bold;  text-align:center">
+                    <span id = 'crash'></span>회
+                </div>
+        </div>
+    </div>
+
+    <!-- ==============Script=================-->
+    <script>
+        let states = {
+            distance : document.getElementId('distance'), 
+            boot : document.getElementId('boot'), 
+            obstacle : document.getElementId('obstacle'),
+            crash : document.getElementId('crash')
+        }
+
+        /* MQTT 연결 */
+        const BROKER_ID =  'localhost';
+        const BROKER_PORT = '1883';
+        const CLIENT_ID = 'client_id - ' + parseInt(Math.random() * 100);
+        const SUBSCRIBE_TOPIC = "rccar/response/#";
+
+        client = new Paho.MQTT.Client(BROKER_ID, BROKER_PORT, CLIENT_ID);
+        console.log(BROKER_ID, BROKER_PORT, CLIENT_ID);
+
+        // publish & sub //
+        client.onConnectionLost = onConnectionLost;
+        client.onMessageArrived = onMessageArrived;
+
+        client.connect({
+            onSuccess : onConnect, 
+            onFailure : onFailure
+        });
+
+        function onConnectionLost(responseObject) {
+            if (responseObject.errorCode !== 0) {
+                console.log('onConnectLost : ' + responseObject.errorMessage);
+            }
+        }
+
+        function onMessageArrived(message) {
+            let parts = message.destinationName.split('/');
+
+            console.log("topic : " + message.destinationName);
+            console.log("message : " + message.payloadString);
+        }
+
+        function onFailure() {
+            alert("Please enter host and port again . . ");
+        }
+
+        function onConnect() {
+            console.log("onConnect!")
+            client.subscribe(SUBSCRIBE_TOPIC);
+        }
+    </script>
 </body>
 </html>

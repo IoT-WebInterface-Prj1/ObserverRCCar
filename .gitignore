@@ -1,2 +1,2 @@
-iot_server/mjpeg/__pycache__/
-iot_server/media/
+__pycache__
+db.sqlite3
