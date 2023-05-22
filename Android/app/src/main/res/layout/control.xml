@@ -5,7 +5,10 @@
     <WebView
         android:id="@+id/streaming"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"/>
+
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -37,10 +40,11 @@
 
         <Button
             android:id="@+id/right_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Right"
-            android:background="#80000000"/>
+            android:layout_weight="1"
+            android:background="#80000000"
+            android:text="Right" />
 
         <Button
             android:id="@+id/record_button"
@@ -49,6 +53,8 @@
             android:layout_gravity="top|start"
             android:text="Button"
             android:layout_margin="16dp"/>
-
     </LinearLayout>
+
+
+
 </FrameLayout>

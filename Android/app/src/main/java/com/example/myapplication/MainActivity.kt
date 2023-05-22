@@ -14,18 +14,16 @@ class MainActivity : AppCompatActivity() {
     // MQTT ---
     private lateinit var mqttClient: MqttClient
 
-    // 자동로그인 ---
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var editor: SharedPreferences.Editor
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        var isBoot = false
+
         // ---------------------
 //          172.30.1.57
 
-        val brokerUrl = "tcp://172.30.1.73:1883" // 같은 와이파이 ip주소를 할당받아야
+        val brokerUrl = "tcp://172.30.1.120:1883" // 같은 와이파이 ip주소를 할당받아야
         val clientId = "android_boot"
         try{
             mqttClient = MqttClient(brokerUrl, clientId, MemoryPersistence())
@@ -39,7 +37,18 @@ class MainActivity : AppCompatActivity() {
         val startButton = findViewById<Button>(R.id.boot)
         startButton.setOnClickListener {
             val topic = "rccar/drive/boot"
-            val message = "on"
+            val msg = startButton.text.toString()
+//            val message = msg
+            val message = startButton.text.toString()
+
+            if (message == "on") {  // boot 버튼을 클릭
+                startButton.text = "off"
+                isBoot = true
+            }
+            else { // boot off 버튼을 클릭
+                startButton.text = "on"
+                isBoot = false
+            }
             val mqttMessage = MqttMessage(message.toByteArray())
             mqttClient.publish(topic, mqttMessage)
         }
@@ -58,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                     // 시동을 걸고, 성공 여부를 발행
                     val success = startEngine(mqttMessage)
 
-                    if (success) {
+                    if (success && isBoot == true) {
                         runOnUiThread {
                             val intent = Intent(this@MainActivity, Control::class.java)
                             intent.putExtra("success", success)

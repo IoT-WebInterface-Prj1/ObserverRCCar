@@ -1,2 +1,8 @@
+<<<<<<< HEAD
 __pycache__
+=======
+__pycache__/
+media/sec_file/
+media/temp_video/
+>>>>>>> b4b5cbac2960cba9b191e2d23a8da4fbabf52c69
 db.sqlite3
