@@ -1,12 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <WebView
+        android:id="@+id/streaming"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"/>
+
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
+        android:layout_gravity="bottom|end"
         android:orientation="horizontal"
         android:padding="16dp">
 
@@ -14,46 +21,40 @@
             android:id="@+id/left_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Left"
-            android:background="#80000000"/>
+            android:background="#80000000"
+            android:text="Left" />
 
-        <LinearLayout
+        <Button
+            android:id="@+id/forward_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="#80000000"
+            android:text="for" />
 
-            <Button
-                android:id="@+id/forward_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:background="#80000000"/>
-
-            <Button
-                android:id="@+id/backward_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:background="#80000000"/>
-
-        </LinearLayout>
+        <Button
+            android:id="@+id/backward_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#80000000"
+            android:text="back" />
 
         <Button
             android:id="@+id/right_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Right"
-            android:background="#80000000"/>
-
+            android:background="#80000000"
+            android:text="Right" />
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="bottom|left"
-            ></Button>
-
+            android:id="@+id/record_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:text="Button"
+            android:layout_margin="16dp"/>
     </LinearLayout>
+
+
 
 </FrameLayout>

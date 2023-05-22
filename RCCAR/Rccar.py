@@ -67,7 +67,7 @@ class Rccar:
     def start(self):
         try:
             self.client.on_connect = self.on_connect
-            self.client.on_message = self.on_message            
+            self.client.on_message = self.on_message
             self.client.connect(host_id, port, 60)
         except Exception as err:
             print(f"ERR ! /{err}/")
