@@ -2,6 +2,8 @@
 
 <h3>{{vfile.file_name}}</h3>
 
-<video controls>
-    <source src="/media/sec_file/{{vfile.file_name}}" type="video/mp4"/>
-</video>
+<div style="align-items:center; display: flex; justify-content:center;">
+    <video style="width:900; height:540" controls="controls" autoplay>
+      <source src="/media/sec_file/{{vfile.file_name}}" type="video/mp4">
+    </video>
+</div>
