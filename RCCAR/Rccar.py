@@ -67,7 +67,7 @@ class Rccar:
     def start(self):
         try:
             self.client.on_connect = self.on_connect
-            self.client.on_message = self.on_message
+            self.client.on_message = self.on_message            
             self.client.connect(host_id, port, 60)
         except Exception as err:
             print(f"ERR ! /{err}/")
@@ -85,15 +85,14 @@ class Rccar:
     def on_message(self, client, userdata, msg):
         value = str(msg.payload.decode())
         _, _, router = msg.topic.split("/")
-        
         if router == "boot": # 시동 관련
             result = bootControl(self.client, value)
             
-            # if result and self.getBoot(): resultPub(f"{self.topic}/boot", self.client, 0, "Already Boot!")             
+            if result and self.getBoot(): resultPub(f"{self.topic}/boot", self.client, 0, "Already Boot!")             
             # Set Boot -------------
-            # else: 
-            self.setBoot(result)
-                # resultPub(f"{self.topic}/boot", self.client, 1)
+            else: 
+                self.setBoot(result)
+                resultPub(f"{self.topic}/boot", self.client, 1)
             # ----------------------
             
             print(f"Boot State -> [[{self.getBoot()}]]")
@@ -121,12 +120,16 @@ class Rccar:
             self.motorDrive.stop()
             self.ultrasonic = None
             self.tilt = None
+            
+            serverPub("boot", "OFF", self.client)
         # Boot ON -> Sensor ON
         else:    
             if self.ultrasonic == None: self.ultrasonic = DistanceSensor(self.echo, self.trig) #Echo : 9, Trigger : 10
             if self.tilt == None: self.tilt = Tilt(self.tilt_pin)
             # RGB LED Control
             self.warnningControl("yellow")
+            
+            serverPub("boot", "ON", self.client)
             
     def setState(self, result):
         lock = threading.Lock()
@@ -200,9 +203,9 @@ class Rccar:
                 self.buzzerControl("crash")
                 self.warnningControl("red")
                 
-                # resultPub(tiltTopic, self.client, 1, tiltMsg)
+                resultPub(tiltTopic, self.client, 1, tiltMsg)
         except FaultOperError as err:
-            # resultPub(tiltTopic, self, client, 0, "잘못된 접근 - ERR_TILT")
+            resultPub(tiltTopic, self, client, 0, "잘못된 접근 - ERR_TILT")
             print(err + " < ERR _ TILT > ")
             
 if __name__ == "__main__":    
@@ -224,7 +227,7 @@ if __name__ == "__main__":
         distance = car.getSensor("distance")
         if distance != None: car.detect(distance.distance)
         
-        # --- tilt sensor ---
+        # --- tilt sensor ---r
         tilt = car.getSensor("tilt")
         if tilt != None: car.tiltControl()
             
