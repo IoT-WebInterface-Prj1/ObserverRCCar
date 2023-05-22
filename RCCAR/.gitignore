@@ -1,1 +1,18 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+*.log
+*.pot
+*.pyc
 __pycache__/
+migrations/
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media
+.vscode/
+=======
+__pycache__/
+>>>>>>> main
+=======
+__pycache__/
+>>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f

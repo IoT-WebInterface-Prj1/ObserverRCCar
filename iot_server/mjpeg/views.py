@@ -1,11 +1,12 @@
 from django.views.generic import TemplateView
+from django.http import HttpResponse, StreamingHttpResponse
+from .picam import MJpegStreamCam
 from django.http import HttpResponse, StreamingHttpResponse, JsonResponse
 from .picam import MJpegStreamCam
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
 from .models import SecFile
 from django.urls import path
-
 
 mjpegstream = MJpegStreamCam()
 
@@ -16,7 +17,7 @@ class CamView(TemplateView):
         context = super().get_context_data()
         context["mode"] = self.request.GET.get("mode", "#")
         return context
-    
+
 
 def stream(request):
     return StreamingHttpResponse(mjpegstream, content_type='multipart/x-mixed-replace;boundary=--myboundary')
@@ -46,3 +47,4 @@ class SecFileDetailView(generic.DetailView):
     model = SecFile
     template_name = 'mjpeg/sec_file_detail.html'
     context_object_name = 'vfile'
+

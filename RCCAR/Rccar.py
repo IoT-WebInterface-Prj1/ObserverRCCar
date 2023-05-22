@@ -10,21 +10,31 @@ from Tilt import Tilt
 from gpiozero import  DistanceSensor
 from gpiozero import LED
 from gpiozero import Buzzer
+<<<<<<< HEAD
+=======
 from gpiozero import RGBLED
 from colorzero import Color
+>>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
 
 import time
 import threading
 
+<<<<<<< HEAD
+=======
 host_id = '172.30.1.120'
 port = 1883
 
+>>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
 class FaultOperError(Exception):    # Exception을 상속받아서 새로운 예외를 만듦
     def __init__(self):
         super().__init__('잘못된 접근 발생')    
 
 class Rccar:
+<<<<<<< HEAD
+    def __init__(self, left, right, echo, trigger, stop, buzzer, tilt):
+=======
     def __init__(self, left, right, echo, trigger, stop, buzzer, tilt, rgbled):
+>>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
         self.topic = "rccar/response"
         # Sensors ==============
         # Motor --
@@ -35,7 +45,11 @@ class Rccar:
         self.trig = trigger
         # LEDS --
         self.stop_led = LEDS(stop)
+<<<<<<< HEAD
+        # self.state = LED(state)
+=======
         self.rgb_led = RGBLED(rgbled[0], rgbled[1], rgbled[2])
+>>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
         # Buzzer --
         self.buzzer = Buzzer(buzzer)
         # Tilt --
@@ -68,7 +82,11 @@ class Rccar:
         try:
             self.client.on_connect = self.on_connect
             self.client.on_message = self.on_message
+<<<<<<< HEAD
+            self.client.connect('172.30.1.18', 1883, 60)
+=======
             self.client.connect(host_id, port, 60)
+>>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
         except Exception as err:
             print(f"ERR ! /{err}/")
             
@@ -125,8 +143,11 @@ class Rccar:
         else:    
             if self.ultrasonic == None: self.ultrasonic = DistanceSensor(self.echo, self.trig) #Echo : 9, Trigger : 10
             if self.tilt == None: self.tilt = Tilt(self.tilt_pin)
+<<<<<<< HEAD
+=======
             # RGB LED Control
             self.warnningControl("yellow")
+>>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
             
     def setState(self, result):
         lock = threading.Lock()
@@ -160,7 +181,10 @@ class Rccar:
         if (dist < 0.5):
             detectTopic = self.topic + "/detect"
             detectMsg = f"Object Detect!! //Distance : {dist * 100}(cm)"
+<<<<<<< HEAD
+=======
             self.warnningControl("orange")
+>>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
             
             # resultPub(detectTopic, self.client, 1, detectMsg)
             if (dist < 0.3): self.motorDrive.stop()            
@@ -178,8 +202,17 @@ class Rccar:
         else: self.stop_led.off() # forward or ect... led off
         
     def warnningControl(self, color):
+<<<<<<< HEAD
+        if color == "r":
+            pass
+        elif color == "g":
+            pass
+        elif color == "b":
+            pass
+=======
         self.rgb_led.color = Color(color)
         self.rgb_led.blink(on_time=0.4, off_time=0.1, n=2)
+>>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
         
     def buzzerControl(self, op, dist = 0):
         # op : {'on' : ultrasonic Detect, 'off' : ultrasonic Not Detect, 'crash' : tilt Detect }
@@ -197,9 +230,14 @@ class Rccar:
         
         try :
             if (self.tilt.getTilt()): 
+<<<<<<< HEAD
+                self.warnningControl("r")
+                self.buzzerControl("crash")
+=======
                 self.buzzerControl("crash")
                 self.warnningControl("red")
                 
+>>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
                 # resultPub(tiltTopic, self.client, 1, tiltMsg)
         except FaultOperError as err:
             # resultPub(tiltTopic, self, client, 0, "잘못된 접근 - ERR_TILT")
@@ -211,9 +249,14 @@ if __name__ == "__main__":
     stopLEDs = (20, 21)
     buzzer = 2
     tilt = 3
+<<<<<<< HEAD
+    
+    car = Rccar(leftMotor, rightMotor, echo, trig, stopLEDs, buzzer, tilt) 
+=======
     rgbled = (17, 27, 22)
     
     car = Rccar(leftMotor, rightMotor, echo, trig, stopLEDs, buzzer, tilt, rgbled) 
+>>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
     
     # --- mqtt 실행 ---
     client = car.getClient()
@@ -228,4 +271,8 @@ if __name__ == "__main__":
         tilt = car.getSensor("tilt")
         if tilt != None: car.tiltControl()
             
+<<<<<<< HEAD
         time.sleep(0.5) # sleep 을 주지 않으면 동작 안함 ! 
+=======
+        time.sleep(0.5) # sleep 을 주지 않으면 동작 안함 ! 
+>>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f

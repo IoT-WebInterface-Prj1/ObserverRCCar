@@ -3,12 +3,12 @@ import time
 import numpy as np
 from picamera import PiCamera
 import picamera.array
-import cv2   
+import cv2  
 from datetime import datetime
 import paho.mqtt.client as mqtt
 import os
 import subprocess
-import requests
+import requests 
 
 class MJpegStreamCam:
     def __init__(self, framerate=25, width=640, height=480):
@@ -23,6 +23,10 @@ class MJpegStreamCam:
         self.camera.rotation = 0
         self.camera.resolution = self.size
         self.camera.framerate = self.framerate
+
+
+    def __del__(self):
+        self.camera.close()
 
         self.client = mqtt.Client()
         self.host_id = '172.30.1.120'
@@ -81,11 +85,12 @@ class MJpegStreamCam:
                     self.frames_to_save = []  # 저장한 프레임 리스트 초기화
                     self.cleanup_files()
 
-
     # frames_to_save 리스트에 있는 프레임을 mp4 형식으로 변환
     def save_frames_as_mp4(self, tilt=""):
         dtime = datetime.now().strftime('%y%m%d_%H%M%S')
+
         file_path = os.path.join(self.save_tempdirectory, "recorded_{0}{1}.mp4".format(dtime, tilt))
+
         writer = cv2.VideoWriter(file_path, cv2.VideoWriter_fourcc(*'mp4v'), self.framerate, self.size)
 
         for frame in self.frames_to_save:
@@ -107,7 +112,11 @@ class MJpegStreamCam:
 
     # 녹화 파일 관리 메소드
     def cleanup_files(self):
+<<<<<<< HEAD
         files = sorted(os.listdir(self.save_tempdirectory))
+=======
+        files = sorted(os.listdir(self.save_directory))
+>>>>>>> ce8d818c9022cf431aedac863aa1ea109ec00407
         num_files = len(files)
 
         if num_files > self.max_files: # media 폴더에 파일이 self.max_files개 보다 많다면 가장 오래된 파일 삭제
@@ -115,7 +124,11 @@ class MJpegStreamCam:
 
             for file_name in files_to_delete:
                 print("파일 삭제:", file_name)
+<<<<<<< HEAD
                 file_path = os.path.join(self.save_tempdirectory, file_name)
+=======
+                file_path = os.path.join(self.save_directory, file_name)
+>>>>>>> ce8d818c9022cf431aedac863aa1ea109ec00407
                 subprocess.run(["rm", file_path])
 
     # 충격 감지
