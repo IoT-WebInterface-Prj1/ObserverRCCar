@@ -18,12 +18,11 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 import java.util.*
 import android.speech.RecognitionListener
 import android.speech.SpeechRecognizer
-
-
-
+import java.io.InputStream
 
 
 class Control : AppCompatActivity() {
+    val inputStream: InputStream = assets.open("zinc-shard-386900-8f64ab3ad6ce.json")
     private lateinit var mqttClient: MqttClient
     private lateinit var speechRecognizer: SpeechRecognizer
     private lateinit var toast: Toast

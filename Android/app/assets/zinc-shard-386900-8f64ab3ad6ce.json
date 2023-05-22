@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "zinc-shard-386900",
+  "private_key_id": "8f64ab3ad6ce9a7ac7b8bb562fcadf1734200a10",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDG0R0OEDA532ec\n3vowd8aS5DE1Ig3G7FX4+amcnwLf20yJKqKbcMg9e5AprKAm9ZpQOrqe8oKaLFMp\niQ4UGxBc6aC7yLoDy1xD6a5brru/iS/8g0On2+2AklJa55sxuYRuqGyMxX+jtJHJ\n5DzuLXDNLYHcZ78F3i1cRPgWjsd8e6S2pjLFkENA2t1PId7iHaRCDT7faar8IBvN\n7SP2PELWXhzWM6kzy6cd2aryKXm/mcvhAHDhIgOM59MUYIh9EbS2zPVO6dE/HV6q\nVD+cct8rXQeKh64Dh5hqknOHKFmC2tDPs3rNB4p/mOJTL+HnTkBacavcLvN03o48\notqgxFejAgMBAAECggEADy+99msKJAGKmpL1rWoYwvOnRpW5U66NypzXdd03jP3l\nVLzq+tCcmwWrN2O2QAOWq/Ywdx+zFi+4kn2jk6mVkGNQIcftXYjVHWLmLJ6mPLUv\n8yvbqSDFfYKvw73ZPu0azpES6ZXUcB7E3BURCmhyK1oEh19tWfdko52pDaAOYNW2\nV6uIPieh5OEqd+y3ZKvAuDcCh/5wEEZ9Bseezdt83LplTo70vSSETFxn2GeOYrx9\nIicy8klIuSrtR8EUvVCA8j1y5D03TyPJ0o2iXopMySzjpUFxYfUAmQYVV3JRrPKA\nq5/2qZ4oz+w1iS3bRYH3Ennfit5Sl27MH5rrGPELYQKBgQD4zmiNzefY34UBuEfL\np6dat4tR8GgTtRQ5UQ9ikxZ3XxflLS7vBI2qFbN1YAJLU0RQB/U7+2rl6viEUbSe\nYlhgMb4IlzYcWYerDBSnf+ef2pHCgXICP2n2PUHS646Xl33AsPsAqf9SLePVrzgV\nxaSJui6u4RHmU+oCCZcR04A/iwKBgQDMkLKncCWZtVpkLQlcsd0BO5A0yIAa3zTv\nAMVVGjWCOW86k9Voqh1+KcMxvsbLte3IAvXgcU/dydc/5TkIJ1e+ixKMfZpdbnpY\nKjEGDPasRImQ0MbIVQXgdmiKpGnvxvGW0Al3S2O8dQr9brZrTrQ34cXm9BAxJJDz\nySLCxk3LSQKBgGkXtm3/RSkD8MhzMFBDdpsI4B4yL6PzXqF/LcJzYo/1aMByv1pS\nUAxBslWnwhBTEY3Ebr9xSQvoniQ15tbnr3CiUiSKyl5bKsUDC05c5ldNGThROPje\nFEHgSgdvXAGICaP0nXEAXUo2+/9sTYJUw1UxgTp48viZBUTrDBaJgahVAoGAd/N9\nHtuO4MPLviP+cmFFQ3zGwXy0SY2Kv37HN3DH4ZWGGGYpZFckNh+M+rVwYnFKfdbm\nkHZBK784PZpOx+4x8GQiO0lHY/PtP5d16aNeXYNO2yDg/wWEDavA/1MLX3NbpGBW\nvKHzWMWU7SinROMAoCf+YL/KYtabPKg7ftTDNykCgYEAvSxMPSqwTQnY4cexQyxY\n48j+Ph8vHRoQr9uVZg/l3p4r0x3YqMLMmJmsB6RBJhjX2I0mMyvaT/KcdKi99Lhn\nIjwgxcYeGFQq54cacSHbK+e0tG8o0MxqlOSzvDhWSg1NDLPEUo0NXe1ak81G8Ylp\njaVg04txlb9np1xhdHgkWpY=\n-----END PRIVATE KEY-----\n",
+  "client_email": "rccar-381@zinc-shard-386900.iam.gserviceaccount.com",
+  "client_id": "108935071815263881555",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/rccar-381%40zinc-shard-386900.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
