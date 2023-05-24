@@ -126,14 +126,24 @@ class Rccar:
             self.motorDrive.stop()
             self.ultrasonic = None
             self.tilt = None
+<<<<<<< HEAD
             serverPub("boot", "OFF", self.client)
+=======
+            
+            # serverPub("boot", "OFF", self.client)
+>>>>>>> fa8dd33e7a501542f7969d2cb3565b1d6d43c401
         # Boot ON -> Sensor ON
         else:    
             if self.ultrasonic == None: self.ultrasonic = DistanceSensor(self.echo, self.trig) #Echo : 9, Trigger : 10
             if self.tilt == None: self.tilt = Tilt(self.tilt_pin)
             # RGB LED Control
             self.warnningControl("yellow")
+<<<<<<< HEAD
             serverPub("boot", "ON", self.client)
+=======
+            
+            # serverPub("boot", "ON", self.client)
+>>>>>>> fa8dd33e7a501542f7969d2cb3565b1d6d43c401
             
     def setState(self, result):
         lock = threading.Lock()
@@ -209,7 +219,7 @@ class Rccar:
                 
                 resultPub(tiltTopic, self.client, 1, tiltMsg)
         except FaultOperError as err:
-            resultPub(tiltTopic, self, client, 0, "잘못된 접근 - ERR_TILT")
+            resultPub(tiltTopic, self.client, 0, "잘못된 접근 - ERR_TILT")
             print(err + " < ERR _ TILT > ")
             
 if __name__ == "__main__":    

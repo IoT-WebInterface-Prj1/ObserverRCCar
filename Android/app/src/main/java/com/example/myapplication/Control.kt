@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.http.SslError
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -42,12 +43,12 @@ class Control : AppCompatActivity() {
         // MQTT----------------
         val brokerUrl = "tcp://172.30.1.20:1883"
         val clientId = "android_control"
-        val payload = "disconnected".toByteArray(Charsets.UTF_8)
+//        val payload = "disconnected".toByteArray(Charsets.UTF_8)
         try{
             mqttClient = MqttClient(brokerUrl, clientId, MemoryPersistence())
             val options = MqttConnectOptions()
             options.connectionTimeout = 5
-            options.setWill("rccar/drive/control",payload,2, false)
+//            options.setWill("rccar/drive/control",payload,2, false)
             mqttClient.connect(options)
         }catch(ex: MqttException){
             ex.printStackTrace()
@@ -66,8 +67,7 @@ class Control : AppCompatActivity() {
         }
         webView.loadUrl("http://172.30.1.120:8000/mjpeg/")
         // -----------------------
-
-        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(applicationContext)
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
         val recognitionListener = object : RecognitionListener {
             override fun onReadyForSpeech(params: Bundle?) {}
 
@@ -86,11 +86,13 @@ class Control : AppCompatActivity() {
                 if (matches != null && matches.isNotEmpty()) {
                     val spokenText = matches[0]
                     if (spokenText.contains("시동")) {
+//                        publish("멈춰")
                         mqttClient.publish("rccar/drive/boot", MqttMessage("off".toByteArray()))
 
                     } else if (spokenText.contains("멈춰")) {
                         publish("stop")
                     }
+                    else Log.d("SPEECH", "Somtheing ELSE")
                 }
 
                 isListening = false
@@ -102,6 +104,7 @@ class Control : AppCompatActivity() {
 
             override fun onRmsChanged(rmsdB: Float) {}
         }
+        speechRecognizer.setRecognitionListener(recognitionListener)
 
         val recordButton = findViewById<ImageView>(R.id.record_button)
         val rightButton = findViewById<ImageView>(R.id.btnRight)
@@ -173,16 +176,20 @@ class Control : AppCompatActivity() {
     }
 
     private fun publish(message: String) {
-
-        Log.e("MQTT CONNECT", "${mqttClient.isConnected()}")
-
-        mqttClient.publish("rccar/drive/control", MqttMessage(message.toByteArray()))
+        if (mqttClient.isConnected()) {
+            mqttClient.publish("rccar/drive/control", MqttMessage(message.toByteArray()))
+        } else {
+            Log.e("MQTT", "Not connected")
+        }
     }
 
     private fun startListening() {
         val permission = Manifest.permission.RECORD_AUDIO
         val granted = PackageManager.PERMISSION_GRANTED
         val hasPermission = ContextCompat.checkSelfPermission(this, permission) == granted
+        val recordButton = findViewById<ImageView>(R.id.record_button)
+
+        recordButton.setColorFilter(Color.parseColor("#55ff0000"))
 
         if (!hasPermission) {
             ActivityCompat.requestPermissions(this, arrayOf(permission), RECORD_REQUEST_CODE)
@@ -200,6 +207,9 @@ class Control : AppCompatActivity() {
 
     private fun stopListening() {
         if (isListening) {
+            val recordButton = findViewById<ImageView>(R.id.record_button)
+
+            recordButton.setColorFilter(Color.parseColor("#00000000"))
             speechRecognizer.stopListening()
             speechRecognizer.cancel()
             speechRecognizer.destroy()
@@ -208,15 +218,15 @@ class Control : AppCompatActivity() {
         }
     }
 
-//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//
-//        if (requestCode == RECORD_REQUEST_CODE) {
-//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                startListening()
-//            }
-//        }
-//    }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == RECORD_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startListening()
+            }
+        }
+    }
 
     override fun onDestroy() {
         webView.destroy()
