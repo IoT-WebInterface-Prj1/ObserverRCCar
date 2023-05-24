@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -7,7 +8,6 @@ import android.content.Intent
 import org.eclipse.paho.client.mqttv3.*
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
-
 
 class MainActivity : AppCompatActivity() {
     val TAG = "[[MainActivity]]"
@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        val brokerUrl = "tcp://192.168.0.5:1883" // 같은 와이파이 ip주소를 할당받아야
+        val brokerUrl = "tcp://172.30.1.38:1883" // 같은 와이파이 ip주소를 할당받아야
         val clientId = "android_boot"
         try{
             mqttClient = MqttClient(brokerUrl, clientId, MemoryPersistence())
@@ -67,6 +67,14 @@ class MainActivity : AppCompatActivity() {
             }
         })
         mqttClient.subscribe("rccar/response/boot")
+
+        val listButton = findViewById<Button>(R.id.media_list)
+        listButton.setOnClickListener{
+            runOnUiThread{
+                val intent = Intent(this@MainActivity, MediaView::class.java)
+                startActivity(intent)
+            }
+        }
     }
 
     private fun startEngine(successMessage: MqttMessage) : Boolean {

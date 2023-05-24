@@ -33,5 +33,10 @@
             android:name=".Control"
             android:label="Control Activity"
             android:exported="true"/>
+
+        <activity
+            android:name=".MediaView"
+            android:label="Media Activity"
+            android:exported="true"/>
     </application>
 </manifest>

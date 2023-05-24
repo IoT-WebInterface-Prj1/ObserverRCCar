@@ -38,7 +38,7 @@ class Control : AppCompatActivity() {
         toast = Toast.makeText(this, "", Toast.LENGTH_SHORT)
 
         // MQTT----------------
-        val brokerUrl = "tcp://192.168.0.5:1883"
+        val brokerUrl = "tcp://172.30.1.38:1883"
         val clientId = "android_control"
         val payload = "disconnected".toByteArray(Charsets.UTF_8)
         try{
@@ -133,6 +133,8 @@ class Control : AppCompatActivity() {
         backwardButton.setOnClickListener {
             publish("backward")
         }
+
+
 
         mqttClient.subscribe("rccar/response/control")
 

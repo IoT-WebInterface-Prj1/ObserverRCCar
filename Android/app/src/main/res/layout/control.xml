@@ -4,10 +4,12 @@
 
     <WebView
         android:id="@+id/streaming"
-        android:layout_width="match_parent"
+        android:layout_width="750dp"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" >
+
+    </WebView>
 
 
     <LinearLayout
@@ -54,7 +56,6 @@
             android:text="Button"
             android:layout_margin="16dp"/>
     </LinearLayout>
-
 
 
 </FrameLayout>
