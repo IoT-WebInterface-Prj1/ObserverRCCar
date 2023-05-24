@@ -38,6 +38,9 @@ android {
 }
 
 dependencies {
+    //google speech
+    //implementation 'com.google.android.gms:play-services-speech:18.0.1'
+
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 

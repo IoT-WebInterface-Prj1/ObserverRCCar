@@ -84,26 +84,32 @@ class Rccar:
         
     def on_message(self, client, userdata, msg):
         value = str(msg.payload.decode())
-        _, _, router = msg.topic.split("/")
-        if router == "boot": # 시동 관련
-            result = bootControl(self.client, value)
-            
-            if result and self.getBoot(): resultPub(f"{self.topic}/boot", self.client, 0, "Already Boot!")             
-            # Set Boot -------------
-            else: 
-                self.setBoot(result)
-                resultPub(f"{self.topic}/boot", self.client, 1)
-            # ----------------------
-            
-            print(f"Boot State -> [[{self.getBoot()}]]")
-        else:
-            bootState = self.getBoot()
-            result = driveControl(bootState, client, value, self.motorDrive)  
-            
-            # Set State -------------
-            self.setState(result)
-            # ----------------------
-            self.ledControl()
+        _, mode, router = msg.topic.split("/")
+        if mode == "drive":
+            if router == "boot": # 시동 관련
+                result = bootControl(self.client, value)
+                
+                if result and self.getBoot(): resultPub(f"{self.topic}/boot", self.client, 0, "Already Boot!")             
+                # Set Boot -------------
+                else: 
+                    self.setBoot(result)
+                    resultPub(f"{self.topic}/boot", self.client, 1)
+                # ----------------------
+                
+                print(f"Boot State -> [[{self.getBoot()}]]")
+            elif router == "control":
+                bootState = self.getBoot()
+                result = driveControl(bootState, client, value, self.motorDrive)  
+                
+                # Set State -------------
+                self.setState(result)
+                # ----------------------
+                self.ledControl()
+        elif mode == "state":
+            if router == "boot": 
+                msg = "OFF"
+                if (self.getBoot): msg = "ON"
+                serverPub("boot", msg, self.client)
     
     # Setter
     def setBoot(self, result):
@@ -120,7 +126,6 @@ class Rccar:
             self.motorDrive.stop()
             self.ultrasonic = None
             self.tilt = None
-            
             serverPub("boot", "OFF", self.client)
         # Boot ON -> Sensor ON
         else:    
@@ -128,7 +133,6 @@ class Rccar:
             if self.tilt == None: self.tilt = Tilt(self.tilt_pin)
             # RGB LED Control
             self.warnningControl("yellow")
-            
             serverPub("boot", "ON", self.client)
             
     def setState(self, result):

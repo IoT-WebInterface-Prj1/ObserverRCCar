@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.widget.Button
 import android.content.Intent
 import android.content.SharedPreferences
+import android.util.Log
+import android.widget.ImageView
+import android.widget.TextView
 import org.eclipse.paho.client.mqttv3.*
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
@@ -13,17 +16,15 @@ class MainActivity : AppCompatActivity() {
     val TAG = "[[MainActivity]]"
     // MQTT ---
     private lateinit var mqttClient: MqttClient
+    var isBoot = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        var isBoot = false
-
         // ---------------------
 //          172.30.1.57
 
-        val brokerUrl = "tcp://172.30.1.120:1883" // 같은 와이파이 ip주소를 할당받아야
+        val brokerUrl = "tcp://172.30.1.20:1883" // 같은 와이파이 ip주소를 할당받아야
         val clientId = "android_boot"
         try{
             mqttClient = MqttClient(brokerUrl, clientId, MemoryPersistence())
@@ -34,23 +35,36 @@ class MainActivity : AppCompatActivity() {
             ex.printStackTrace()
         }
 
-        val startButton = findViewById<Button>(R.id.boot)
+        val startButton = findViewById<ImageView>(R.id.boot)
+        val bootTxt = findViewById<TextView>(R.id.txtBootState)
+        val controlButton = findViewById<Button>(R.id.btnControl)
+        val stateButton = findViewById<Button>(R.id.btnState)
+
         startButton.setOnClickListener {
             val topic = "rccar/drive/boot"
-            val msg = startButton.text.toString()
-//            val message = msg
-            val message = startButton.text.toString()
+            val bootState = bootTxt.text.toString()
+            var message = "off"
 
-            if (message == "on") {  // boot 버튼을 클릭
-                startButton.text = "off"
+            if (bootState == "BOOT ON") isBoot = false  // boot on인경우 클릭 -> boot off 되어야 한다
+            else { // boot off 버튼을 클릭 -> boot on 되어야 한다
                 isBoot = true
+                message = "on"
             }
-            else { // boot off 버튼을 클릭
-                startButton.text = "on"
-                isBoot = false
-            }
+
             val mqttMessage = MqttMessage(message.toByteArray())
             mqttClient.publish(topic, mqttMessage)
+        }
+
+        controlButton.setOnClickListener {
+            if (isBoot) {
+                val intent = Intent(this@MainActivity, Control::class.java)
+                startActivity(intent)
+            }
+        }
+
+        stateButton.setOnClickListener {
+            val intent = Intent(this@MainActivity, State::class.java)
+            startActivity(intent)
         }
 
         mqttClient.setCallback(object : MqttCallback {
@@ -67,12 +81,18 @@ class MainActivity : AppCompatActivity() {
                     // 시동을 걸고, 성공 여부를 발행
                     val success = startEngine(mqttMessage)
 
-                    if (success && isBoot == true) {
-                        runOnUiThread {
-                            val intent = Intent(this@MainActivity, Control::class.java)
-                            intent.putExtra("success", success)
-                            startActivity(intent)
+                    runOnUiThread {
+                        if (success) { // 정상적으로 mqtt 처리가 되었으면 시동 상태 사용자에게 표기
+                            if (isBoot) {
+                                bootTxt.text = "BOOT ON"
+                                controlButton.setEnabled(true)
+                            }
+                            else {
+                                bootTxt.text = "BOOT OFF"
+                                controlButton.setEnabled(false)
+                            }
                         }
+                        else isBoot = !isBoot // 정상적으로 처리되지 않았으므로 시동 상태 되돌리기
                     }
                 }
             }
