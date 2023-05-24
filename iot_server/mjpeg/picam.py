@@ -76,7 +76,7 @@ class MJpegStreamCam:
                     self.tilt_on()
 
                 print(len(self.frames_to_save))
-                if len(self.frames_to_save) == 20:
+                if len(self.frames_to_save) == 250:
                     self.save_frames_as_mp4()  # 250개의 프레임을 한 번에 .mp4 형식으로 저장
                     self.frames_to_save = []  # 저장한 프레임 리스트 초기화
                     self.cleanup_files()
@@ -174,6 +174,4 @@ class MJpegStreamCam:
         value = str(msg.payload.decode())
         _, _, router = msg.topic.split("/")
 
-        if router=="tilt":
-            print("기울었다고 전해라")
-            self.istilt=True
+        if router=="tilt": self.istilt=True

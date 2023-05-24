@@ -43,12 +43,12 @@ class Control : AppCompatActivity() {
         // MQTT----------------
         val brokerUrl = "tcp://172.30.1.20:1883"
         val clientId = "android_control"
-//        val payload = "disconnected".toByteArray(Charsets.UTF_8)
+        val payload = "disconnected".toByteArray(Charsets.UTF_8)
         try{
             mqttClient = MqttClient(brokerUrl, clientId, MemoryPersistence())
             val options = MqttConnectOptions()
-            options.connectionTimeout = 5
-//            options.setWill("rccar/drive/control",payload,2, false)
+            options.connectionTimeout = 5000
+            options.setWill("rccar/drive/control",payload,2, false)
             mqttClient.connect(options)
         }catch(ex: MqttException){
             ex.printStackTrace()

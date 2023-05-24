@@ -33,8 +33,8 @@
             android:label="Control Activity"
             android:exported="true"/>
         <activity
-            android:name=".State"
-            android:label="State Activity"
+            android:name=".MediaView"
+            android:label="Media Activity"
             android:exported="true"/>
     </application>
 </manifest>

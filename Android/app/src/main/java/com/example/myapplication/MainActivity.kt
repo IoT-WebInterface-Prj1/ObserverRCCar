@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         val startButton = findViewById<ImageView>(R.id.boot)
         val bootTxt = findViewById<TextView>(R.id.txtBootState)
         val controlButton = findViewById<Button>(R.id.btnControl)
-        val stateButton = findViewById<Button>(R.id.btnState)
+        val stateButton = findViewById<Button>(R.id.btnMediaView)
 
         startButton.setOnClickListener {
             val topic = "rccar/drive/boot"
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         stateButton.setOnClickListener {
-            val intent = Intent(this@MainActivity, State::class.java)
+            val intent = Intent(this@MainActivity, MediaView::class.java)
             startActivity(intent)
         }
 

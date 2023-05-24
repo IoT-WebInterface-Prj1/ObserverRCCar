@@ -42,12 +42,12 @@
         app:layout_constraintTop_toBottomOf="@+id/txtBootState" />
 
     <Button
-        android:id="@+id/btnState"
+        android:id="@+id/btnMediaView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_round"
-        android:text="STATE"
         android:layout_marginTop="10dp"
+        android:background="@drawable/button_round"
+        android:text="Tilt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnControl" />
