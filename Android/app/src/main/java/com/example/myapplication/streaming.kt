@@ -25,7 +25,7 @@ class Streaming : AppCompatActivity() {
                 handler?.proceed()
             }
         }
-        webView.loadUrl("http://172.30.1.29:8000/mjpeg/?mode=stream")
+        webView.loadUrl("http://172.30.1.20:8000/mjpeg/?mode=stream")
     }
 }
 /* 172.30.1.29:8000/mjpeg/?mode=stream */

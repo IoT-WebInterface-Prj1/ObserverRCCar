@@ -8,3 +8,9 @@ def resultPub(_topic, client, res = 0, msg = ""):
     else: message = msg
     
     client.publish(topic, message)
+    
+def serverPub(_topic, msg, client):
+    topic = "rccar/state/response/"
+    
+    topic += _topic
+    client.publish(topic, msg)

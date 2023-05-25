@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-vu#vnp%p*_==0w(sjvx$0gy^=i2wi0_^a)**g_oi*by^-4q7ka
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.104', '172.30.1.29', 'localhost', '127.0.0.1', '172.30.1.75']
-
+ALLOWED_HOSTS = ['192.168.0.104', '172.30.1.29', 'localhost', '127.0.0.1', '172.30.1.75', '172.30.1.120']
 
 # Application definition
 
@@ -38,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mjpeg',
+    'state',
 ]
 
 MIDDLEWARE = [
@@ -55,11 +55,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-<<<<<<< HEAD
-        'DIRS': [],
-=======
         'DIRS': [Path.joinpath(BASE_DIR / 'templates')],
->>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
         'APP_DIRS': True, 
         'OPTIONS': {
             'context_processors': [
@@ -121,14 +117,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-<<<<<<< HEAD
-=======
 STATICFILES_DIRS = [ BASE_DIR / 'static']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = Path.joinpath(BASE_DIR, 'media')
-
->>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

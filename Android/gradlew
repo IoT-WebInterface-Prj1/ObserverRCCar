@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> b4b5cbac2960cba9b191e2d23a8da4fbabf52c69
 #!/usr/bin/env sh
 
 #
@@ -184,6 +187,8 @@ APP_ARGS=`save "$@"`
 eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS "\"-Dorg.gradle.appname=$APP_BASE_NAME\"" -classpath "\"$CLASSPATH\"" org.gradle.wrapper.GradleWrapperMain "$APP_ARGS"
 
 exec "$JAVACMD" "$@"
+<<<<<<< HEAD
+=======
 =======
 #!/usr/bin/env sh
 
@@ -371,3 +376,4 @@ eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS "\"-Dorg.gradle.appname=$A
 
 exec "$JAVACMD" "$@"
 >>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
+>>>>>>> b4b5cbac2960cba9b191e2d23a8da4fbabf52c69

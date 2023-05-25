@@ -1,6 +1,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
 
     <WebView
         android:id="@+id/streaming"
@@ -11,51 +14,113 @@
 
     </WebView>
 
-
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="273dp"
+        android:layout_height="199dp"
         android:layout_gravity="bottom|end"
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <Button
-            android:id="@+id/left_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#80000000"
-            android:text="Left" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="165dp"
+            android:layout_height="157dp"
+            android:layout_weight="1">
 
-        <Button
-            android:id="@+id/forward_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#80000000"
-            android:text="for" />
+            <ImageView
+                android:id="@+id/btnForward"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                app:layout_constraintBottom_toTopOf="@+id/btnStop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/arrow_up" />
 
-        <Button
-            android:id="@+id/backward_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#80000000"
-            android:text="back" />
+            <ImageView
+                android:id="@+id/btnLeft"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                app:layout_constraintBottom_toTopOf="@+id/btnBackward"
+                app:layout_constraintEnd_toStartOf="@+id/btnStop"
+                app:layout_constraintTop_toBottomOf="@+id/btnForward"
+                app:srcCompat="@drawable/arrow_left" />
 
-        <Button
-            android:id="@+id/right_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#80000000"
-            android:text="Right" />
+            <ImageView
+                android:id="@+id/btnRight"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:layout_constraintBottom_toTopOf="@+id/btnBackward"
+                app:layout_constraintStart_toEndOf="@+id/btnStop"
+                app:layout_constraintTop_toBottomOf="@+id/btnForward"
+                app:srcCompat="@drawable/arrow_right" />
 
-        <Button
+            <ImageView
+                android:id="@+id/btnBackward"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnStop"
+                app:srcCompat="@drawable/arrow_down" />
+
+            <ImageView
+                android:id="@+id/btnStop"
+                android:layout_width="46dp"
+                android:layout_height="49dp"
+                android:layout_weight="1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/stop" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
             android:id="@+id/record_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="69dp"
+            android:layout_height="157dp"
             android:layout_gravity="top|start"
-            android:text="Button"
-            android:layout_margin="16dp"/>
+            android:layout_weight="1"
+            app:srcCompat="@drawable/mic" />
     </LinearLayout>
 
+<!--        <Button-->
+<!--            android:id="@+id/record_button"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="top|start"-->
+<!--            android:text="Button"-->
+<!--            android:layout_margin="16dp"-->
+
+<!--    <Button-->
+<!--        android:id="@+id/left_button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="#80000000"-->
+<!--        android:text="Left" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/forward_button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="#80000000"-->
+<!--        android:text="for" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/backward_button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="#80000000"-->
+<!--        android:text="back" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/right_button"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_weight="1"-->
+<!--        android:background="#80000000"-->
+<!--        android:text="Right" />-->
 
 </FrameLayout>

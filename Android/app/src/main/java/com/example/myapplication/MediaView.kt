@@ -24,6 +24,7 @@ class MediaView: AppCompatActivity() {
                 handler?.proceed()
             }
         }
-        webView.loadUrl("http://172.30.1.78:8000/mjpeg/sec_file")
+
+        webView.loadUrl("http://172.30.1.59:8000/mjpeg/sec_file")
     }
 }
