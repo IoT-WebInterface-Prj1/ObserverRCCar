@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['192.168.0.104', '172.30.1.29', 'localhost', '127.0.0.1', '172.30.1.75', '172.30.1.120', '172.30.1.59']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mjpeg',
+    'state',
 ]
 
 MIDDLEWARE = [

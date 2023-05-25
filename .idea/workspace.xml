@@ -9,13 +9,24 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8384080a-3d94-45e7-8725-e6c7fccf5758" name="Changes" comment="" />
+    <list default="true" id="8384080a-3d94-45e7-8725-e6c7fccf5758" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/Android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Android/app/src/main/java/com/example/myapplication/Control.kt" beforeDir="false" afterPath="$PROJECT_DIR$/Android/app/src/main/java/com/example/myapplication/Control.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Android/app/src/main/java/com/example/myapplication/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/Android/app/src/main/java/com/example/myapplication/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Android/app/src/main/java/com/example/myapplication/MediaAdapter.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Android/app/src/main/java/com/example/myapplication/UploadMedia.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Android/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Android/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Android/app/src/main/res/layout/control.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Android/app/src/main/res/layout/control.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Android/app/src/main/res/layout/media_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Android/app/src/main/res/layout/media_list.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\LG\.android\avd\Pixel_3a_API_33_x86_64.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\LG\.android\avd\Resizable_Experimental_API_33.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />

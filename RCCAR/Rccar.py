@@ -64,7 +64,7 @@ class Rccar:
         try:
             self.client.on_connect = self.on_connect
             self.client.on_message = self.on_message
-            self.client.connect(host_id, port, 60)
+            self.client.connect(host_id, port)
         except Exception as err:
             print(f"ERR ! /{err}/")
             
@@ -80,6 +80,7 @@ class Rccar:
         
     def on_message(self, client, userdata, msg):
         value = str(msg.payload.decode())
+<<<<<<< HEAD
         
         print(value)
         if (value == "disconnected"): 
@@ -87,6 +88,10 @@ class Rccar:
             self.setBoot(0)
         else:
             _, _, router = msg.topic.split("/")
+=======
+        _, mode, router = msg.topic.split("/")
+        if mode == "drive":
+>>>>>>> main
             if router == "boot": # 시동 관련
                 result = bootControl(self.client, value)
                 
@@ -98,6 +103,7 @@ class Rccar:
                 # ----------------------
                 
                 print(f"Boot State -> [[{self.getBoot()}]]")
+<<<<<<< HEAD
             else:
                 bootState = self.getBoot()
                 result = driveControl(bootState, client, value, self.motorDrive)  
@@ -108,6 +114,21 @@ class Rccar:
                     self.setState(result)
                     # ----------------------
                     self.ledControl()
+=======
+            elif router == "control":
+                bootState = self.getBoot()
+                result = driveControl(bootState, client, value, self.motorDrive)  
+                
+                # Set State -------------
+                self.setState(result)
+                # ----------------------
+                self.ledControl()
+        elif mode == "state":
+            if router == "boot": 
+                msg = "OFF"
+                if (self.getBoot): msg = "ON"
+                serverPub("boot", msg, self.client)
+>>>>>>> main
     
     # Setter
     def setBoot(self, result):
@@ -128,13 +149,12 @@ class Rccar:
             
             # serverPub("boot", "OFF", self.client)
         # Boot ON -> Sensor ON
-        else:    
-            if self.ultrasonic == None: self.ultrasonic = DistanceSensor(self.echo, self.trig) #Echo : 9, Trigger : 10
+        else:
+            if self.ultrasonic == None: 
+                self.ultrasonic = DistanceSensor(self.echo, self.trig) #Echo : 9, Trigger : 10
             if self.tilt == None: self.tilt = Tilt(self.tilt_pin)
             # RGB LED Control
             self.warnningControl((1, 1, 0)) #yellow
-            
-            # serverPub("boot", "ON", self.client)
             
     def setState(self, result):
         lock = threading.Lock()
