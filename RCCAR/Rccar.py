@@ -170,7 +170,7 @@ class Rccar:
             detectMsg = f"Object Detect!! //Distance : {dist * 100}(cm)"
             self.warnningControl((1, 0, 1)) #magenta
             
-            # resultPub(detectTopic, self.client, 1, detectMsg)
+            resultPub(detectTopic, self.client, 1, detectMsg)
             if (dist < 0.35): self.motorDrive.stop()            
             
             # Buzzer Control
@@ -237,4 +237,4 @@ if __name__ == "__main__":
         tilt = car.getSensor("tilt")
         if tilt != None: car.tiltControl()
             
-        time.sleep(0.01) # sleep 을 주지 않으면 동작 안함 ! 
+        time.sleep(0.5) # sleep 을 주지 않으면 동작 안함 ! 
