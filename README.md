@@ -27,4 +27,5 @@
 3. 다음의 두 파일을 실행 (Rpi)
 	- [./RCCAR/Rccar.py](./RCCAR/Rccar.py)
 	- [./iot_server/manage.py](./iot_server/manage.py) >> `python manage.py 0.0.0.0:8000` 을 통해 실행
-		- []() 에서  
+		- [./RCCAR/config/settings.py](./RCCAR/config/settings.py) 에서  `ALLOWED_HOSTS` 에 **IP** 추가해야한다
+4. 안드로이드 어플을 `build` 후 다운 혹은 업로드된 `apk` 파일을 통해 실행
