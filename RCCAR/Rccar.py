@@ -16,7 +16,7 @@ from colorzero import Color
 import time
 import threading
 
-host_id = '172.30.1.120'
+host_id = '172.30.1.59'
 port = 1883
 
 class FaultOperError(Exception):    # Exception을 상속받아서 새로운 예외를 만듦
@@ -68,7 +68,7 @@ class Rccar:
         try:
             self.client.on_connect = self.on_connect
             self.client.on_message = self.on_message
-            self.client.connect(host_id, port, 60)
+            self.client.connect(host_id, port)
         except Exception as err:
             print(f"ERR ! /{err}/")
             
