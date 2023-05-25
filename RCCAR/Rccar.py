@@ -80,7 +80,6 @@ class Rccar:
         
     def on_message(self, client, userdata, msg):
         value = str(msg.payload.decode())
-<<<<<<< HEAD
         
         print(value)
         if (value == "disconnected"): 
@@ -88,10 +87,6 @@ class Rccar:
             self.setBoot(0)
         else:
             _, _, router = msg.topic.split("/")
-=======
-        _, mode, router = msg.topic.split("/")
-        if mode == "drive":
->>>>>>> main
             if router == "boot": # 시동 관련
                 result = bootControl(self.client, value)
                 
@@ -103,7 +98,6 @@ class Rccar:
                 # ----------------------
                 
                 print(f"Boot State -> [[{self.getBoot()}]]")
-<<<<<<< HEAD
             else:
                 bootState = self.getBoot()
                 result = driveControl(bootState, client, value, self.motorDrive)  
@@ -114,21 +108,6 @@ class Rccar:
                     self.setState(result)
                     # ----------------------
                     self.ledControl()
-=======
-            elif router == "control":
-                bootState = self.getBoot()
-                result = driveControl(bootState, client, value, self.motorDrive)  
-                
-                # Set State -------------
-                self.setState(result)
-                # ----------------------
-                self.ledControl()
-        elif mode == "state":
-            if router == "boot": 
-                msg = "OFF"
-                if (self.getBoot): msg = "ON"
-                serverPub("boot", msg, self.client)
->>>>>>> main
     
     # Setter
     def setBoot(self, result):
