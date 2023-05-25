@@ -180,12 +180,19 @@ class Control : AppCompatActivity() {
                     Log.d("MESSAGE", "$message")
                     showNotification("RCCAR Notification", "충돌 발생!!")
                 }
+                else if (topic != null && mqttMessage != null && topic == "rccar/response/detect") {
+                    val message = mqttMessage?.toString()
+                    Log.d("MESSAGE", "$message")
+                    showNotification("RCCAR Notification", "장애물!!")
+                }
             }
 
             override fun deliveryComplete(token: IMqttDeliveryToken?) {
                 println("Message delivered")
             }
         })
+        mqttClient.subscribe("rccar/response/tilt")
+        mqttClient.subscribe("rccar/response/detect")
         mqttClient.subscribe("rccar/response/control")
     }
 
