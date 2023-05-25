@@ -16,12 +16,8 @@ from colorzero import Color
 import time
 import threading
 
-host_id = '172.30.1.120'
+host_id = '172.30.1.59'
 port = 1883
-
-class FaultOperError(Exception):    # Exception을 상속받아서 새로운 예외를 만듦
-    def __init__(self):
-        super().__init__('잘못된 접근 발생')    
 
 class Rccar:
     def __init__(self, left, right, echo, trigger, stop, buzzer, tilt, rgbled):
@@ -68,7 +64,7 @@ class Rccar:
         try:
             self.client.on_connect = self.on_connect
             self.client.on_message = self.on_message
-            self.client.connect(host_id, port, 60)
+            self.client.connect(host_id, port)
         except Exception as err:
             print(f"ERR ! /{err}/")
             
@@ -84,8 +80,13 @@ class Rccar:
         
     def on_message(self, client, userdata, msg):
         value = str(msg.payload.decode())
-        _, mode, router = msg.topic.split("/")
-        if mode == "drive":
+        
+        print(value)
+        if (value == "disconnected"): 
+            print("Disconnected - > Boot OFF")
+            self.setBoot(0)
+        else:
+            _, _, router = msg.topic.split("/")
             if router == "boot": # 시동 관련
                 result = bootControl(self.client, value)
                 
@@ -97,19 +98,16 @@ class Rccar:
                 # ----------------------
                 
                 print(f"Boot State -> [[{self.getBoot()}]]")
-            elif router == "control":
+            else:
                 bootState = self.getBoot()
                 result = driveControl(bootState, client, value, self.motorDrive)  
                 
-                # Set State -------------
-                self.setState(result)
-                # ----------------------
-                self.ledControl()
-        elif mode == "state":
-            if router == "boot": 
-                msg = "OFF"
-                if (self.getBoot): msg = "ON"
-                serverPub("boot", msg, self.client)
+                if result != "err":
+                    print(result)
+                    # Set State -------------
+                    self.setState(result)
+                    # ----------------------
+                    self.ledControl()
     
     # Setter
     def setBoot(self, result):
@@ -126,12 +124,16 @@ class Rccar:
             self.motorDrive.stop()
             self.ultrasonic = None
             self.tilt = None
+            self.warnningControl((1, 1, 0)) #yellow
+            
+            # serverPub("boot", "OFF", self.client)
         # Boot ON -> Sensor ON
-        else:    
-            if self.ultrasonic == None: self.ultrasonic = DistanceSensor(self.echo, self.trig) #Echo : 9, Trigger : 10
+        else:
+            if self.ultrasonic == None: 
+                self.ultrasonic = DistanceSensor(self.echo, self.trig) #Echo : 9, Trigger : 10
             if self.tilt == None: self.tilt = Tilt(self.tilt_pin)
             # RGB LED Control
-            self.warnningControl("yellow")
+            self.warnningControl((1, 1, 0)) #yellow
             
     def setState(self, result):
         lock = threading.Lock()
@@ -162,13 +164,13 @@ class Rccar:
     
     # Control ---
     def detect(self, dist):
-        if (dist < 0.5):
+        if (dist < 0.6):
             detectTopic = self.topic + "/detect"
             detectMsg = f"Object Detect!! //Distance : {dist * 100}(cm)"
-            self.warnningControl("orange")
+            self.warnningControl((1, 0, 1)) #magenta
             
-            # resultPub(detectTopic, self.client, 1, detectMsg)
-            if (dist < 0.3): self.motorDrive.stop()            
+            resultPub(detectTopic, self.client, 1, detectMsg)
+            if (dist < 0.35): self.motorDrive.stop()            
             
             # Buzzer Control
             self.buzzerControl("on", dist)
@@ -183,8 +185,7 @@ class Rccar:
         else: self.stop_led.off() # forward or ect... led off
         
     def warnningControl(self, color):
-        self.rgb_led.color = Color(color)
-        self.rgb_led.blink(on_time=0.4, off_time=0.1, n=2)
+        self.rgb_led.blink(on_time=0.4, off_time=0.1, n=2, on_color = color, off_color = (0, 0, 0))
         
     def buzzerControl(self, op, dist = 0):
         # op : {'on' : ultrasonic Detect, 'off' : ultrasonic Not Detect, 'crash' : tilt Detect }
@@ -202,13 +203,15 @@ class Rccar:
         
         try :
             if (self.tilt.getTilt()): 
+                self.motorDrive.stop()     
                 self.buzzerControl("crash")
-                self.warnningControl("red")
+                self.warnningControl((1, 0, 0)) #red
                 
                 resultPub(tiltTopic, self.client, 1, tiltMsg)
-        except FaultOperError as err:
-            resultPub(tiltTopic, self.client, 0, "잘못된 접근 - ERR_TILT")
+        except Exception as err:
+            resultPub(tiltTopic, self, client, 0, "잘못된 접근 - ERR_TILT")
             print(err + " < ERR _ TILT > ")
+            resultPub(tiltTopic, self.client, 0, "ERR _ TILT")
             
 if __name__ == "__main__":    
     leftMotor, rightMotor = (5, 6, 26), (23, 24, 25)
