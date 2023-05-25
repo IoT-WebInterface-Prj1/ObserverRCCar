@@ -1,4 +1,6 @@
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
 ## IoT Gateway & Edge Device & Android Programming Prj
 
 * 이도현
@@ -52,6 +54,7 @@
 =======
 >>>>>>> 63059f011afc500dd5f21b2856f8c5c6f471ae72
 =======
+>>>>>>> b4b5cbac2960cba9b191e2d23a8da4fbabf52c69
 ## IoT Gateway & Edge Device & Android Programming Prj
 
 * 이도현
@@ -104,4 +107,7 @@
 		컨트롤러 제어
 =======
 >>>>>>> 63059f011afc500dd5f21b2856f8c5c6f471ae72
+<<<<<<< HEAD
+=======
 >>>>>>> 733a5a0d781f3ce9958712d274184754d15f420f
+>>>>>>> b4b5cbac2960cba9b191e2d23a8da4fbabf52c69
