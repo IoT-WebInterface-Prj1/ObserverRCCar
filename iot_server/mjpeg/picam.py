@@ -25,7 +25,7 @@ class MJpegStreamCam:
         self.camera.framerate = self.framerate
 
         self.client = mqtt.Client()
-        self.host_id = '172.30.1.120'
+        self.host_id = '172.30.1.59'
         self.port = 1883
         self.istilt=False
 
@@ -42,7 +42,7 @@ class MJpegStreamCam:
 
     def __iter__(self):
         encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 80]
-        face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+        face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_fullbody.xml')
 
         with picamera.array.PiRGBArray(self.camera, size=self.size) as stream:
             while True:
@@ -75,8 +75,7 @@ class MJpegStreamCam:
                 if self.istilt:
                     self.tilt_on()
 
-                print(len(self.frames_to_save))
-                if len(self.frames_to_save) == 20:
+                if len(self.frames_to_save) == 250:
                     self.save_frames_as_mp4()  # 250개의 프레임을 한 번에 .mp4 형식으로 저장
                     self.frames_to_save = []  # 저장한 프레임 리스트 초기화
                     self.cleanup_files()
@@ -175,5 +174,4 @@ class MJpegStreamCam:
         _, _, router = msg.topic.split("/")
 
         if router=="tilt":
-            print("기울었다고 전해라")
             self.istilt=True

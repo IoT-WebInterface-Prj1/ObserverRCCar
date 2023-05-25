@@ -3,11 +3,6 @@ from driveControlPub import resultPub
 from Drive import Drive
 
 topic = "rccar/response"
-            
-class FaultOperError(Exception):    # Exception을 상속받아서 새로운 예외를 만듦
-    def __init__(self):
-        super().__init__('잘못된 명령어 입력')    
-            
 def bootControl(client, value):
     global lock
     isBoot = 0
@@ -40,7 +35,7 @@ def driveControl(isBoot, client, value, Motors):
             elif value == "right": Motors.right()
             elif value == "left": Motors.left()
             elif value == "stop": Motors.stop()
-            else: raise FaultOperError 
+            else: raise  
             
             resultPub(driveTopic, client, 1, f"{value} success")
             
@@ -48,3 +43,4 @@ def driveControl(isBoot, client, value, Motors):
         except Exception as err:
             resultPub(driveTopic, client, 0, f"{value} fail")
             print(err)
+            return "err"
